@@ -1,0 +1,25 @@
+version: '3'
+services:
+  nginx:
+    build: ./nginx_service/
+    ports:
+      - "80:80"
+
+    depends_on:
+      - frontend
+      - api
+
+  frontend:
+    build: ./frontend_service/
+
+  api:
+    build: ./api_service/
+
+  books_updater:
+    build: ./books_updater_service/
+    volumes:
+    - ./books_updater_service/res:/app/res
+    - ./books_updater_service/upload:/app/upload
+
+
+
