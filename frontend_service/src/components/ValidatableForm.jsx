@@ -1,10 +1,7 @@
 import React from 'react';
-
-import BootstrapForm from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-
 import PropTypes from 'prop-types';
+
+import { Form, Container, Button } from 'react-bootstrap';
 
 export default function ValidatableForm({
   handleSubmit,
@@ -16,7 +13,7 @@ export default function ValidatableForm({
 }) {
   return (
     <Container>
-      <BootstrapForm onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         {
           rest.children.map((child, idx) => React.cloneElement(child, {
             errors,
@@ -36,13 +33,13 @@ export default function ValidatableForm({
         {
           // eslint-disable-next-line react/prop-types
           errors.serverError && (
-            <BootstrapForm.Text className="text-muted error">
+            <Form.Text className="text-muted error">
               {/* eslint-disable-next-line react/prop-types */}
               {errors.serverError}
-            </BootstrapForm.Text>
+            </Form.Text>
           )
         }
-      </BootstrapForm>
+      </Form>
     </Container>
   );
 }
