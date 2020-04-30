@@ -1,9 +1,9 @@
 import Navbar from './Navbar';
-import Catalog from './Catalog';
-import SearchResults from './SearchResults';
+import ValidatableForm from './ValidatableForm';
+import ValidatableInput from './ValidatableInput';
 
 export {
   Navbar,
-  Catalog,
-  SearchResults,
+  ValidatableForm,
+  ValidatableInput,
 };
