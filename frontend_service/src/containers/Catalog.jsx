@@ -7,7 +7,7 @@ export default function Catalog() {
     <div className="catalog">
       <Form className="search-form">
         <Form.Group>
-          <Form.Control type="text" placeholder="Search..." />
+          <Form.Control type="text" placeholder="Enter title..." />
           <Button>Search</Button>
         </Form.Group>
       </Form>
