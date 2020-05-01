@@ -1,9 +1,11 @@
 import Catalog from './Catalog';
-import SearchResults from './SearchResults';
+import FiltersAccordion from './FiltersAccordion';
 import RegistrationPage from './RegistrationPage';
+import SearchResults from './SearchResults';
 
 export {
   Catalog,
-  SearchResults,
+  FiltersAccordion,
   RegistrationPage,
+  SearchResults,
 };

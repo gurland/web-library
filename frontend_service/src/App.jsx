@@ -5,6 +5,7 @@ import { Navbar } from './components';
 import { Catalog, SearchResults, RegistrationPage } from './containers';
 
 import 'semantic-ui-css/semantic.min.css';
+import "react-datepicker/dist/react-datepicker.min.css";
 import './styles/App.scss';
 
 function App() {
