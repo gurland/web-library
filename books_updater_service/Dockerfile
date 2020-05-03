@@ -8,4 +8,4 @@ RUN npm install
 COPY . .
 RUN npm run tsc
 
-CMD ["node", "dist/src/app.js"]
+CMD ["node", "dist/app.js"]
