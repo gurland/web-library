@@ -6,6 +6,7 @@ import FiltersAccordion from './FiltersAccordion';
 import { getAuthors, getGenres, getLangs } from '../utils/api/mock';
 
 export default function SearchForm() {
+  const [query, setQuery] = useState('');
   const [authors, setAuthors] = useState(getAuthors());
   const [genres, setGenres] = useState(getGenres());
   const [langs, setLangs] = useState(getLangs());
@@ -14,7 +15,12 @@ export default function SearchForm() {
   return (
     <Form className="search-form">
       <Form.Group>
-        <Form.Control type="text" placeholder="Шукати за назвою..." />
+        <Form.Control
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Шукати за назвою..."
+        />
         <Button type="submit">Пошук</Button>
       </Form.Group>
       <FiltersAccordion
