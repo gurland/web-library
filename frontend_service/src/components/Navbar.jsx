@@ -15,6 +15,7 @@ export default function Navbar() {
           <Nav.Link href="/reader">Читалка</Nav.Link>
           { /* todo change to log in / log out if user logged in */ }
           <Nav.Link href="/registration">Реєстрація</Nav.Link>
+          <Nav.Link href="/login">Увійти</Nav.Link>
         </Nav>
       </BootstrapNavbar.Collapse>
     </BootstrapNavbar>

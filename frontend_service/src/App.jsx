@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import { Navbar } from './components';
-import { Catalog, SearchResults, RegistrationPage } from './containers';
+import { Catalog, SearchResults, RegistrationPage, LoginPage } from './containers';
 
 import 'semantic-ui-css/semantic.min.css';
 import './styles/App.scss';
@@ -20,6 +20,9 @@ function App() {
         </Route>
         <Route path="/registration">
           <RegistrationPage />
+        </Route>
+        <Route path="/login">
+          <LoginPage />
         </Route>
       </Switch>
     </div>
