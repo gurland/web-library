@@ -1,0 +1,5 @@
+@import "../mixins";
+
+.registration-page {
+  @include defaultFormStyles();
+}

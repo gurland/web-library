@@ -4,3 +4,12 @@
 //}
 @import "~bootstrap/scss/bootstrap";
 @import "components";
+
+.container{
+  display: flex;
+  justify-content: center;
+}
+
+.text-muted.error{
+  color: darkred !important;
+}

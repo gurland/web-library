@@ -4,3 +4,35 @@
   align-items: $ai;
   flex-direction: $f-dir;
 }
+
+@mixin defaultFormStyles {
+  display: flex;
+  height: 70vh;
+
+  justify-content: center;
+  align-items: center;
+
+  form{
+    width: 50%;
+  }
+
+  button{
+    width: 100%;
+  }
+
+  @media (max-width: 992px) {
+    form{
+      width: 70%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    form{
+      width: 100%;
+    }
+  }
+
+  label{
+    margin: 0;
+  }
+}
