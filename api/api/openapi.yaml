@@ -1,0 +1,424 @@
+openapi: 3.0.0
+info:
+  title: Web Library API
+  description: This is coursework project API
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/gurland/web-library/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: books
+  description: Everething related to books
+- name: auth
+  description: Authentication required
+paths:
+  /genres:
+    get:
+      tags:
+      - books
+      summary: Returns localized categorized genres
+      description: |
+        By passing in ISO 639-1 language code you can get translated
+        genres and its categories names
+      operationId: getGenres
+      parameters:
+      - name: language
+        in: query
+        description: two-letter language code
+        required: false
+        style: form
+        explode: true
+        schema:
+          maxLength: 2
+          minLength: 2
+          type: string
+          format: iso-639-1
+          default: en
+      responses:
+        "200":
+          description: aviable localized genres and categories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreCategory'
+        "400":
+          description: bad language code
+      x-swagger-router-controller: Books
+  /authors:
+    get:
+      tags:
+      - books
+      summary: Returns matching author names, used in autocomplete
+      description: Search authors names by query string
+      operationId: suggestAuthors
+      parameters:
+      - name: name
+        in: query
+        description: author's full or partial name, case independent
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Тарас Шев
+      - name: limit
+        in: query
+        description: limits the number of found authors names
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 0
+          type: integer
+          default: 20
+      responses:
+        "200":
+          description: array of matching authors names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: '["Тарас Шевченко","Тарас Шевчук","Тарас Шевчушко"]'
+                x-content-type: application/json
+        "400":
+          description: bad request
+      x-swagger-router-controller: Books
+  /books:
+    get:
+      tags:
+      - books
+      summary: Finds books by given filters
+      description: Provide various filters and parameters to get needed books
+      operationId: searchBooks
+      parameters:
+      - name: limit
+        in: query
+        description: limits the number of returned books
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 0
+          type: integer
+          default: 20
+      - name: title
+        in: query
+        description: book's full or partial title, case independent
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Кобз
+      - name: authors
+        in: query
+        description: book's authors list
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          example:
+          - Тарас Шевченко
+          - Григорій Сковорода
+          items:
+            type: string
+      - name: genres
+        in: query
+        description: genres list
+        required: false
+        style: form
+        explode: false
+        schema:
+          maxItems: 5
+          type: array
+          example:
+          - poetry
+          - dramaturgy
+          items:
+            type: string
+      - name: language
+        in: query
+        description: two-letter language code of which book is written in
+        required: false
+        style: form
+        explode: true
+        schema:
+          maxLength: 2
+          minLength: 2
+          type: string
+          format: iso-639-1
+      - name: rating
+        in: query
+        description: book's user rating
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 10
+          minimum: 0
+          type: number
+          format: float
+      responses:
+        "200":
+          description: all filtered books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+                x-content-type: application/json
+        "400":
+          description: bad language code
+      x-swagger-router-controller: Books
+  /books/{bookId}:
+    get:
+      tags:
+      - books
+      summary: Get book by it's unique ID
+      description: Get book detail by UUID
+      operationId: getBookById
+      parameters:
+      - name: bookId
+        in: path
+        description: Book unique ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Book retrieved by UUID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        "400":
+          description: Book not found
+      x-swagger-router-controller: Books
+  /books/{bookId}/reviews:
+    get:
+      tags:
+      - books
+      summary: Get user reviews for book
+      description: Get user reviews for book
+      operationId: getBookReviews
+      parameters:
+      - name: bookId
+        in: path
+        description: Book unique ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Reviews retrieved by book UUID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
+        "400":
+          description: Book not found
+      x-swagger-router-controller: Books
+    post:
+      tags:
+      - books
+      summary: Add new review
+      operationId: addBookReview
+      parameters:
+      - name: bookId
+        in: path
+        description: Book unique ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "200":
+          description: Review was added
+        "400":
+          description: Book not found
+        "401":
+          description: Access token is missing or invalid
+      security:
+      - bearerAuth: []
+      x-swagger-router-controller: Books
+  /auth/register:
+    post:
+      tags:
+      - auth
+      summary: Register new user
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_1'
+        required: true
+      responses:
+        "200":
+          description: User was registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        "400":
+          description: User wasn't registered
+      x-swagger-router-controller: Auth
+  /auth/login:
+    post:
+      tags:
+      - auth
+      summary: Login user
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_2'
+        required: true
+      responses:
+        "200":
+          description: User was logged in, new token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        "400":
+          description: Incorrect credentials
+      x-swagger-router-controller: Auth
+components:
+  schemas:
+    Token:
+      type: object
+      properties:
+        access_token:
+          type: string
+      description: JWT Access token
+      example:
+        access_token: access_token
+    GenreCategory:
+      type: object
+      additionalProperties:
+        type: object
+        additionalProperties:
+          type: string
+      description: |
+        Returns localized genres and categories in the following format
+        {"localized_category": {"genre_name": "localized_genre_name"}}
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        authors:
+          type: array
+          items:
+            type: string
+        genres:
+          type: array
+          items:
+            type: string
+        src_lang:
+          type: string
+          format: iso-639-1
+        lang:
+          type: string
+          format: iso-639-1
+        cover:
+          type: string
+          description: Base64 encoded cover image
+          format: byte
+      example:
+        cover: ""
+        src_lang: src_lang
+        genres:
+        - genres
+        - genres
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: title
+        lang: lang
+        authors:
+        - authors
+        - authors
+    Review:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ObjectID
+        date:
+          type: string
+          format: date-time
+        rating:
+          maximum: 10
+          minimum: 1
+          type: integer
+        author:
+          type: string
+        text:
+          type: string
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        author: author
+        rating: 1
+        id: id
+        text: text
+    body:
+      type: object
+      properties:
+        text:
+          type: string
+        rating:
+          maximum: 10
+          minimum: 1
+          type: integer
+    body_1:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+    body_2:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
