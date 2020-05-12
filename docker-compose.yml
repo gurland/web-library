@@ -8,7 +8,14 @@ services:
     depends_on:
       - frontend
       - api
-
+      - reader
+  
+  reader:
+    build: ./reader_service
+    volumes: 
+      - /srv/books:/srv/books
+      - ./reader_service/public:/usr/share/nginx/html/reader
+  
   frontend:
     build: ./frontend_service/
 
@@ -18,7 +25,7 @@ services:
   books_updater:
     build: ./books_updater_service/
     volumes:
-    - ./books_updater_service/res:/app/res
+    - /srv/books:/app/res
     - ./books_updater_service/upload:/app/upload
 
   mongo:
