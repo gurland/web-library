@@ -21,6 +21,10 @@ services:
 
   api:
     build: ./api_service/
+    environment: 
+      MONGO_URI: "mongodb://root:test@mongo:27017/books?authSource=books"
+    volumes: 
+      - ./api_service:/app
 
   books_updater:
     build: ./books_updater_service/
@@ -32,20 +36,10 @@ services:
     build: ./mongo_service/
     restart: always
     volumes:
-    - ./mongo_service/mongodb_data:/data/db
+    - /srv/mongodb_data:/data/db
 
     ports:
       - "27777:27017"
 
     environment:
       MONGO_INITDB_DATABASE: books
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ENABLE_ADMIN: 'false'
-      ME_CONFIG_MONGODB_AUTH_USERNAME: root
-      ME_CONFIG_MONGODB_AUTH_PASSWORD: test
