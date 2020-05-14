@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/gurland/web-library#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "iso-639-1": "^2.1.1",
+    "mongodb": "^3.5.7"
   }
 }
