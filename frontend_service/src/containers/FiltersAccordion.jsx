@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Accordion, Button, Card, Form } from 'react-bootstrap';
 import { Dropdown } from 'semantic-ui-react';
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
+import { formatGenres, getGenres, getLangs, getAuthors } from '../helpers';
 
 export default function FiltersAccordion(props) {
+  const [authors, setAuthors] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [langs, setLangs] = useState([]);
+
+  useEffect(() => {
+    getGenres().then(genres => setGenres(formatGenres(genres)));
+    // getLangs().then(genres => setGenres(formatGenres(genres)));
+    // getAuthors().then(genres => setGenres(formatGenres(genres)));
+  }, []);
+
   const {
-    authors: {
-      authors, setAuthors
+    selectedAuthors: {
+      selectedAuthors, setSelectedAuthors
     },
-    genres: {
-      genres, setGenres
+    selectedGenres: {
+      selectedGenres, setSelectedGenres
     },
-    langs: {
-      langs, setLangs
+    selectedLangs: {
+      selectedLangs, setSelectedLangs
     },
     ratings: {
       ratings, setRatings
@@ -58,6 +69,10 @@ export default function FiltersAccordion(props) {
                 search
                 selection
                 options={genres}
+                onChange={(event, data) => {
+                  if(data.value.length <= 5) setSelectedGenres(data.value);
+                }}
+                value={selectedGenres}
               />
               <Dropdown
                 placeholder='Мови'
@@ -93,17 +108,17 @@ export default function FiltersAccordion(props) {
 }
 
 FiltersAccordion.propTypes = {
-  authors: PropTypes.shape({
-    authors: PropTypes.arrayOf(PropTypes.string).isRequired,
-    setAuthors: PropTypes.func.isRequired,
+  selectedAuthors: PropTypes.shape({
+    selectedAuthors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    setSelectedAuthors: PropTypes.func.isRequired,
   }).isRequired,
-  genres: PropTypes.shape({
-    genres: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    setGenres: PropTypes.func.isRequired,
+  selectedGenres: PropTypes.shape({
+    selectedGenres: PropTypes.arrayOf(PropTypes.string).isRequired,
+    setSelectedGenres: PropTypes.func.isRequired,
   }).isRequired,
-  langs: PropTypes.shape({
-    langs: PropTypes.arrayOf(PropTypes.string).isRequired,
-    setLangs: PropTypes.func.isRequired,
+  selectedLangs: PropTypes.shape({
+    selectedLangs: PropTypes.arrayOf(PropTypes.string).isRequired,
+    setSelectedLangs: PropTypes.func.isRequired,
   }).isRequired,
   ratings: PropTypes.shape({
     ratings: PropTypes.arrayOf(PropTypes.number).isRequired,

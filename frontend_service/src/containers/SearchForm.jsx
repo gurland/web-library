@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, Form } from 'react-bootstrap';
 
 import FiltersAccordion from './FiltersAccordion';
-import { getAuthors, getGenres, getLangs } from '../utils/api/mock';
+import { getGenres, formatGenres } from '../helpers/';
 
 export default function SearchForm() {
   const [query, setQuery] = useState('');
-  const [authors, setAuthors] = useState(getAuthors());
-  const [genres, setGenres] = useState(getGenres());
-  const [langs, setLangs] = useState(getLangs());
   const [ratings, setRatings] = useState([1.0, 10.0]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const [selectedLangs, setSelectedLangs] = useState([]);
 
   return (
     <Form className="search-form">
@@ -34,10 +34,10 @@ export default function SearchForm() {
         <Button type="submit">Пошук</Button>
       </Form.Group>
       <FiltersAccordion
-        authors={{ authors, setAuthors }}
-        genres={{ genres, setGenres }}
-        langs={{ langs, setLangs }}
+        selectedAuthors={{ selectedAuthors, setSelectedAuthors }}
+        selectedLangs={{ selectedLangs, setSelectedLangs }}
         ratings={{ ratings, setRatings }}
+        selectedGenres={{ selectedGenres, setSelectedGenres }}
       />
     </Form>
   );
