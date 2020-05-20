@@ -10,7 +10,7 @@ export default function SearchForm() {
   const [authors, setAuthors] = useState(getAuthors());
   const [genres, setGenres] = useState(getGenres());
   const [langs, setLangs] = useState(getLangs());
-  const [ratings, setRatings] = useState([0, 10]);
+  const [ratings, setRatings] = useState([1.0, 10.0]);
 
   return (
     <Form className="search-form">

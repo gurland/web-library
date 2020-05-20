@@ -24,8 +24,8 @@ export default function FiltersAccordion(props) {
 
   const handleRatingChange = ([start, end]) => {
     setRatings([
-      start.toFixed(1),
-      end.toFixed(1),
+      parseFloat(start.toFixed(1)),
+      parseFloat(end.toFixed(1)),
     ]);
   };
 
@@ -76,7 +76,7 @@ export default function FiltersAccordion(props) {
                 <Form.Control value={ratings[0]}/>
                 <Form.Control value={ratings[1]}/>
                 <Range
-                  min={0.0}
+                  min={1.0}
                   max={10.0}
                   defaultValue={ratings}
                   step={0.1}

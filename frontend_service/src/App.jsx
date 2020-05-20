@@ -13,8 +13,8 @@ function App() {
       <Navbar />
       <Switch>
         <Route path="/" exact>
-          {/*<Catalog />*/}
-          <SearchResults />
+          <Catalog />
+          {/*<SearchResults />*/}
         </Route>
         <Route path="/results">
           <SearchResults />
