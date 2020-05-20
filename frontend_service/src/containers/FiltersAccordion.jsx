@@ -5,12 +5,26 @@ import { Accordion, Button, Card, Form } from 'react-bootstrap';
 import { Dropdown } from 'semantic-ui-react';
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
+
 import { formatGenres, getGenres, getLangs, getAuthors } from '../helpers';
 
 export default function FiltersAccordion(props) {
   const [authors, setAuthors] = useState([]);
   const [genres, setGenres] = useState([]);
-  const [langs, setLangs] = useState([]);
+  const [langs, setLangs] = useState([
+    {
+      text: 'Російська',
+      value: 'ru',
+    },
+    {
+      text: 'Англійська',
+      value: 'en',
+    },
+    {
+      text: 'Українська',
+      value: 'uk',
+    }
+  ]);
 
   useEffect(() => {
     getGenres().then(genres => setGenres(formatGenres(genres)));
@@ -61,6 +75,8 @@ export default function FiltersAccordion(props) {
                 search
                 selection
                 options={authors}
+                onChange={(event, data) => setSelectedAuthors(data.value)}
+                value={selectedAuthors}
               />
               <Dropdown
                 placeholder='Жанри'
@@ -77,10 +93,11 @@ export default function FiltersAccordion(props) {
               <Dropdown
                 placeholder='Мови'
                 fluid
-                multiple
                 search
                 selection
                 options={langs}
+                onChange={(event, data) => setSelectedLangs(data.value)}
+                value={selectedLangs}
               />
             </Card.Body>
           </Card>

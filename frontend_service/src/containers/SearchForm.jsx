@@ -1,19 +1,42 @@
 import React, { useEffect, useState } from 'react';
 
 import { Button, Form } from 'react-bootstrap';
-
 import FiltersAccordion from './FiltersAccordion';
-import { getGenres, formatGenres } from '../helpers/';
+import { Redirect } from 'react-router-dom';
+
+import buildUrl from 'build-url';
 
 export default function SearchForm() {
   const [query, setQuery] = useState('');
   const [ratings, setRatings] = useState([1.0, 10.0]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedAuthors, setSelectedAuthors] = useState([]);
-  const [selectedLangs, setSelectedLangs] = useState([]);
+  const [selectedLangs, setSelectedLangs] = useState('');
 
-  return (
-    <Form className="search-form">
+  const [submitted, setSubmitted] = useState(false);
+
+  return submitted
+    ? <Redirect
+        push
+        to={{
+          pathname: '/results',
+          search: buildUrl({
+            queryParams: {
+              title: query,
+              authors: selectedAuthors,
+              genres: selectedGenres.join(','),
+              language: selectedLangs,
+              minRating: ratings[0],
+              maxRating: ratings[1],
+            }
+          }),
+        }}
+    />
+    : (
+    <Form className="search-form" onSubmit={(e) => {
+      e.preventDefault();
+      setSubmitted(true)
+    }}>
       <Form.Group>
         <Form.Control
           type="text"
@@ -21,16 +44,6 @@ export default function SearchForm() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Шукати за назвою..."
         />
-        {/*
-        // setState found true -> redirect to /results with state: { ...found_data }
-        <Redirect
-          to={{
-            pathname: "/login",
-            search: "?utm=your+face",
-            state: { referrer: currentLocation }
-          }}
-        />
-        */}
         <Button type="submit">Пошук</Button>
       </Form.Group>
       <FiltersAccordion

@@ -139,3 +139,162 @@ export const genres = {
     "sf_space": "Космічна фантастика"
   }
 }
+export const books = [
+  {
+    "id": "3fa85f64-1717-4562-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string","string","string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5717-4563-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5417-4562-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5717-4462-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-1717-4562-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string","string","string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5717-4563-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5417-4562-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5717-4462-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-1717-4562-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string","string","string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5717-4563-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5417-4562-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+  {
+    "id": "3fa85f64-5717-4462-b3fc-2c963f66afa6",
+    "title": "string",
+    "authors": [
+      "string"
+    ],
+    "genres": [
+      "string"
+    ],
+    "src_lang": "string",
+    "lang": "string",
+    "cover": "string"
+  },
+
+];
