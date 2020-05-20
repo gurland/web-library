@@ -1,10 +1,12 @@
 const express = require('express');
 const isLanguageValid = require('iso-639-1').validate;
 const queries = require('./queries.js');
+const cors = require('cors');
 
 const app = express();
 const port = 80;
 
+app.use(cors());
 
 app.get('/api/v1/test', function (req, res) {
     res.send('API service is running!')
