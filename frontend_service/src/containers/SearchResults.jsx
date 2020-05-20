@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Container } from 'react-bootstrap';
 
-import { Container, Card } from 'react-bootstrap';
-import notFoundImage from '../assets/images/404.jpg';
-import { books } from '../helpers/mock.api.data';
+import BookCard from '../components/BookCard';
+
+import { getBooks, normalize } from '../helpers';
+import { useQuery } from '../hooks';
 
 export default function SearchResults() {
+  const [books, setBooks] = useState([]);
+
+  const queryParams = useQuery();
+  const filters = normalize(queryParams);
+
+  useEffect(() => {
+    getBooks(filters).then(books => setBooks(books));
+  });
+
   return (
     <div className="results-page">
       <Container>
@@ -12,13 +23,7 @@ export default function SearchResults() {
           {
             books.map(book => {
               return (
-                <Card key={book.id}>
-                  <Card.Img variant="left" src={notFoundImage} width="128" height="128" />
-                  <Card.Body>
-                    <Card.Title><a href={book.id}>{ book.title }</a></Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">{ book.authors.join(', ') }</Card.Subtitle>
-                  </Card.Body>
-                </Card>
+                <BookCard book={book} />
               );
             })
           }

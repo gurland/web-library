@@ -1,0 +1,38 @@
+@import "../mixins";
+
+.book-card {
+  flex-direction: row;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  overflow: hidden;
+
+  .card-img-left {
+    height: 100%;
+  }
+
+  .native-cover {
+    transform: scale(1.7);
+    transition: 0.2s ease-in-out;
+  }
+
+  .native-cover:hover {
+    transform: scale(1);
+    transition: 0.15s ease-in-out;
+  }
+
+  .img-wrapper {
+    height: 128px;
+    width: 128px;
+    overflow: hidden;
+
+    @include flex(column);
+  }
+
+  .additional-info {
+    @include flex(row, flex-start);
+
+    &-element {
+      margin-right: 1rem;
+    }
+  }
+}

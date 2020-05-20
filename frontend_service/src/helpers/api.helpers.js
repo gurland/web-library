@@ -5,6 +5,10 @@ export async function getGenres(language = 'uk') {
   return await get('genres', { language });
 }
 
+export async function getBooks(filters = {}) {
+  return await get('books', filters);
+}
+
 export async function getAuthors() {
 
 }
@@ -18,8 +22,6 @@ async function get(path, queryParams) {
     path,
     queryParams,
   });
-
-  console.log(url);
 
   const response = await fetch(url);
   return await response.json();
@@ -36,10 +38,3 @@ async function post(path, body) {
 
   return await response.json();
 }
-
-// function createUrl(path, queryParams) {
-//   return buildUrl(API_URL, {
-//     path,
-//     queryParams,
-//   });
-// }
