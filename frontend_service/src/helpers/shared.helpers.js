@@ -51,3 +51,7 @@ export function joinComponents(components, separator = ', ') {
 export function getKeyByValue(obj, value) {
   return Object.keys(obj).find(key => obj[key] === value);
 }
+
+export function clarify(array = []) {
+  return array.filter(el => !!el)
+}
