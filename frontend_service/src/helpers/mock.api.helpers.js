@@ -1,4 +1,5 @@
-import { genres, books, languages } from './mock.api.data';
+import { genres as genresList, books, languages } from './mock.api.data';
+import { addToStorage, getFromStorage } from './localstorage.helpers';
 
 export function getAuthors(query = '') {
   return ['Тарас Шевченко', 'Михайло Коцюбинський', 'Микола Гоголь', 'Лесь Подервянський', 'Говно Говно'];
@@ -6,7 +7,16 @@ export function getAuthors(query = '') {
 
 export function getGenres() {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(genres), 500);
+    setTimeout(() => {
+      let genres = getFromStorage('genres');
+
+      if(!genres) {
+        addToStorage('genres', genresList);
+        resolve(genresList);
+      }
+
+      resolve(genres)
+    }, 500);
   })
 }
 
@@ -16,8 +26,17 @@ export function getBooks() {
   })
 }
 
-export async function getLangs(locale = 'uk') {
+export function getLangs(locale = 'uk') {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(languages[locale]), 500);
+    setTimeout(() => {
+      let langs = getFromStorage('langs');
+
+      if(!langs) {
+        addToStorage('langs', languages[locale])
+        resolve(languages[locale])
+      }
+
+      resolve(langs)
+    }, 500);
   });
 }

@@ -1,10 +1,13 @@
 import React from 'react';
 
 import { Card } from 'react-bootstrap';
-import { fromSource } from '../helpers';
+import { fromSource, findMeta, createLinks, joinComponents } from '../helpers';
 import notFoundImage from '../assets/images/404.jpg';
 
-export default function BookCard({ book }) {
+export default function BookCard({ book, langsMeta, genresMeta }) {
+  const lang = findMeta(langsMeta, book.lang);
+  const genres = book.genres.map(genre => genresMeta[genre]);
+
   return (
     <Card key={book._id} className="book-card">
       <div className="img-wrapper">
@@ -20,9 +23,7 @@ export default function BookCard({ book }) {
           className="mb-2 text-muted"
         >
           {
-            book.author
-              .map(author => <a href="" key={author}>{author}</a>)
-              .reduce((prev, curr) => [prev, ', ', curr])
+            joinComponents(createLinks(book.author, 'authors')) //todo change author to authors
           }
         </Card.Subtitle>
         <hr/>
@@ -30,19 +31,19 @@ export default function BookCard({ book }) {
           <Card.Subtitle
             className="mb-2 text-muted additional-info-element"
           >
-            Жанри: жанр1, жанр2
+            Жанри: { joinComponents(createLinks(genres, 'genres')) }
           </Card.Subtitle>
           <Card.Subtitle
             className="mb-2 text-muted additional-info-element"
           >
-            Мова: { book.lang }
+            Мова: { lang }
           </Card.Subtitle>
           {
             book.src_lang && (
               <Card.Subtitle
                 className="mb-2 text-muted additional-info-element"
               >
-                Мова оригіналу: {book.src_lang}
+                Мова оригіналу: { findMeta(langsMeta, book.src_lang) }
               </Card.Subtitle>
             )
           }

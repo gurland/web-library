@@ -148,6 +148,7 @@ export const books = [
       "Саймон Кларк"
     ],
     "genres": [
+      "sf_horror",
       "sf_horror"
     ],
     "title": "Тьма сгущается",

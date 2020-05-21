@@ -1,7 +1,7 @@
 import { LOCALSTORAGE_KEY } from '../constants';
 
 export function addToStorage(key, data) {
-  const dataToSave = typeof key === 'object' ? JSON.stringify(data) : data
+  const dataToSave = typeof data === 'object' ? JSON.stringify(data) : data
   localStorage.setItem(`${LOCALSTORAGE_KEY}:${key}`, dataToSave);
 }
 

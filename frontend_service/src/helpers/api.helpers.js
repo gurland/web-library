@@ -1,8 +1,16 @@
 import { API_URL } from '../constants';
 import buildUrl from 'build-url';
+import { addToStorage, getFromStorage } from './localstorage.helpers';
 
 export async function getGenres(language = 'uk') {
-  return await get('genres', { language });
+  let genres = getFromStorage('genres');
+
+  if(!genres) {
+    genres = await get('genres', { language });
+    addToStorage('genres', genres);
+  }
+
+  return genres;
 }
 
 export async function getBooks(filters = {}) {
@@ -14,7 +22,14 @@ export async function getAuthors() {
 }
 
 export async function getLangs(locale = 'uk') {
-  return await get('languages', { language: locale });
+  let langs = getFromStorage('langs');
+
+  if(!langs) {
+    langs = await get('languages', { language: locale });
+    addToStorage('langs', langs)
+  }
+
+  return langs;
 }
 
 async function get(path, queryParams) {
