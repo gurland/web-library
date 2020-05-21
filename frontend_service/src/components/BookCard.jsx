@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Card } from 'react-bootstrap';
-import { fromSource, findMeta, createLinks, joinComponents } from '../helpers';
+import { fromSource, findMeta, createLinks, joinComponents, getKeyByValue } from '../helpers';
 import notFoundImage from '../assets/images/404.jpg';
 
 export default function BookCard({ book, langsMeta, genresMeta }) {
@@ -31,7 +31,7 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
           <Card.Subtitle
             className="mb-2 text-muted additional-info-element"
           >
-            Жанри: { joinComponents(createLinks(genres, 'genres')) }
+            Жанри: { joinComponents(createLinks(genres, 'genres', (genre) => getKeyByValue(genresMeta, genre))) }
           </Card.Subtitle>
           <Card.Subtitle
             className="mb-2 text-muted additional-info-element"

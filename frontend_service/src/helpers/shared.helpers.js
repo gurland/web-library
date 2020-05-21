@@ -20,10 +20,14 @@ export function findMeta(metadata = [], key) {
   return metadata.find(langMeta => Object.keys(langMeta).includes(key))[key];
 }
 
-export function createLinks(sourceArray, queryParam) {
-  return sourceArray.map(element => <a href={`/results?${queryParam}=${element}`} key={element}>{element}</a>)
+export function createLinks(sourceArray, queryParam, customUrlCallback = (el) => el) {
+  return sourceArray.map(element => <a href={`/results?${queryParam}=${customUrlCallback(element)}`} key={element}>{element}</a>)
 }
 
 export function joinComponents(components, separator = ', ') {
   return components.reduce((prev, curr) => [prev, separator, curr])
+}
+
+export function getKeyByValue(obj, value) {
+  return Object.keys(obj).find(key => obj[key] === value);
 }
