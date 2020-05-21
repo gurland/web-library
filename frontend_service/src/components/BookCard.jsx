@@ -16,7 +16,15 @@ export default function BookCard({ book }) {
       </div>
       <Card.Body>
         <Card.Title><a href={book._id}>{ book.title }</a></Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">{ book.author.join(', ') }</Card.Subtitle>
+        <Card.Subtitle
+          className="mb-2 text-muted"
+        >
+          {
+            book.author
+              .map(author => <a href="" key={author}>{author}</a>)
+              .reduce((prev, curr) => [prev, ', ', curr])
+          }
+        </Card.Subtitle>
         <hr/>
         <div className="additional-info">
           <Card.Subtitle

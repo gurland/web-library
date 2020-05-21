@@ -143,6 +143,8 @@ export const books = [
   {
     "_id": "7df0b51f-e93c-4d5e-acc6-6fe18ab91b1b",
     "author": [
+      "Саймон Кларк",
+      "Саймон Кларк",
       "Саймон Кларк"
     ],
     "genres": [
