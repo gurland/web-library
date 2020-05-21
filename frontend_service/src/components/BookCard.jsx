@@ -31,12 +31,19 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
           <Card.Subtitle
             className="mb-2 text-muted additional-info-element"
           >
-            Жанри: { joinComponents(createLinks(genres, 'genres', (genre) => getKeyByValue(genresMeta, genre))) }
+            Жанри: { joinComponents(createLinks(genres, 'genres', (localizedGenre) => getKeyByValue(genresMeta, localizedGenre))) }
           </Card.Subtitle>
           <Card.Subtitle
             className="mb-2 text-muted additional-info-element"
           >
-            Мова: { lang }
+            Мова: {
+              <a
+                href={`/results?language=${book.lang}`}
+                key={book.lang}
+              >
+                {lang}
+              </a>
+            }
           </Card.Subtitle>
           {
             book.src_lang && (
