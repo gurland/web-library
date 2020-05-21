@@ -3,14 +3,12 @@ import { Container } from 'react-bootstrap';
 
 import BookCard from '../components/BookCard';
 
-import { getBooks, normalize } from '../helpers';
+import { getBooks } from '../helpers';
 import { useQuery } from '../hooks';
 
 export default function SearchResults() {
   const [books, setBooks] = useState([]);
-
-  const queryParams = useQuery();
-  const filters = normalize(queryParams);
+  const filters = useQuery();
 
   useEffect(() => {
     getBooks(filters).then(books => setBooks(books));

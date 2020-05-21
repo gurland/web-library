@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button, Form } from 'react-bootstrap';
 import FiltersAccordion from './FiltersAccordion';
 import { Redirect } from 'react-router-dom';
 
+import { normalize } from '../helpers';
 import buildUrl from 'build-url';
 
 export default function SearchForm() {
@@ -21,14 +22,14 @@ export default function SearchForm() {
         to={{
           pathname: '/results',
           search: buildUrl({
-            queryParams: {
+            queryParams: normalize({
               title: query,
               authors: selectedAuthors,
               genres: selectedGenres.join(','),
               language: selectedLangs,
               minRating: ratings[0],
               maxRating: ratings[1],
-            }
+            })
           }),
         }}
     />
