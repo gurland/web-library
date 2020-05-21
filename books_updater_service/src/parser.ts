@@ -2,9 +2,14 @@ import { promises as fse } from "fs-extra";
 import { Saxophone } from "saxophone-ts";
 import { Book } from "./book.model";
 import { logger } from "./logger";
+import AdmZip from "adm-zip";
+import { v4 as uuidv4 } from "uuid";
+
+const fs = require('fs');
 
 const detectCharEncoding = require('detect-character-encoding');
-const AdmZip = require('adm-zip');
+// const AdmZip = require('adm-zip');
+const yauzl = require('yauzl');
 const Iconv  = require('iconv').Iconv;
 
 export class FB2Parser {
@@ -14,14 +19,17 @@ export class FB2Parser {
         this.filepath = path;
     }
 
-    public async parse(): Promise<Book | undefined> {
+    public parse(): Book | undefined {
         try {
-            let file = await this.readFile();
+            // logger.log("debug", "Started parsing");
+
+            let file = this.readFile(this.filepath);
 
             const saxParser = new Saxophone();
             let book: Book = {
+                _id: uuidv4(),
                 title: "",
-                author: new Array<string>(),
+                authors: new Array<string>(),
                 genres: new Array<string>(),
                 src_lang: "",
                 lang: "",
@@ -129,7 +137,7 @@ export class FB2Parser {
                             tempName = text.contents;
                         }
                         if (isAuthorLastName && isAuthor) {
-                            book.author.push(tempName + " " + text.contents);
+                            book.authors.push(tempName + " " + text.contents);
                         }
                         if (isGenres) {
                             book.genres.push(text.contents);
@@ -154,9 +162,7 @@ export class FB2Parser {
 
                 saxParser.parse(file);
 
-                return new Promise<Book>((resolve, reject) => {
-                    resolve(book);
-                });
+                return book;
         } catch (err) {
             logger.log("error", `${err}`);
         }
@@ -168,20 +174,33 @@ export class FB2Parser {
         return buf.toString("utf8");
     }
 
-    private async readFile() {
-        let path: string = this.filepath;
+    public readFile(path: string): string {
+        // let path: string = this.filepath;
         let data: Buffer;
 
         if (path.endsWith(".zip")) {
-            let zip = new AdmZip(path);
-            let zipEntries = zip.getEntries();
+            let f = (() => {
+                let zip = new AdmZip(path);
+                let zipEntries = zip.getEntries();
 
-            data = await zipEntries[0].getData(); 
+                return zipEntries[0].getData(); 
+            });
+
+            data = f();
         } else {
-            data = await fse.readFile(this.filepath);
+            data = fs.readFileSync(this.filepath);
         }
 
         const charsetMatch = detectCharEncoding(data);
         return this.decode(data, charsetMatch.encoding, "utf8");
+    }
+
+    public reencodeBook(path: string): string
+    {
+        let file = fs.readFileSync(path);
+        const charsetMatch = detectCharEncoding(file);
+        let reencoded: string = this.decode(file, charsetMatch.encoding, "utf8");
+        reencoded = reencoded.replace(charsetMatch.encoding.toLowerCase(), "UTF-8");
+        return reencoded;
     }
 }

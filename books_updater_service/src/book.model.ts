@@ -1,9 +1,11 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
+import * as uuid from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 
 export interface IBook extends Document {
+    _id: string;
     title: string;
-    author: Array<string>;
+    authors: Array<string>;
     genres: Array<string>;
     src_lang: string;
     lang: string;
@@ -14,8 +16,9 @@ export interface IBook extends Document {
 }
 
 export interface Book {
+    _id: IBook["_id"];
     title: IBook["title"];
-    author: IBook["author"];
+    authors: IBook["authors"];
     genres: IBook["genres"];
     src_lang: IBook["src_lang"];
     lang: IBook["lang"];
@@ -28,14 +31,14 @@ export interface Book {
 const BookSchema = new Schema({
     _id: {
         type: String,
-        default: uuidv4()
+        default: uuid.v4
     },
     title: {
         type: String,
-        unique: [ true, "Title must be unique"],
+        // unique: [ true, "Title must be unique"],
         required: true
     },
-    author: {
+    authors: {
         type: [String],
         required: true
     },

@@ -1,64 +1,101 @@
-const chokidar = require('chokidar');
-const EventEmitter = require('events').EventEmitter;
-const fse = require('fs-extra');
-const AdmZip = require('adm-zip');
-
-import { logger } from "./logger";
-import { config } from "./config";
-import { DbManager } from "./db.manager";
 import { FB2Parser } from "./parser";
+import Books, { Book } from "./book.model";
+import { config } from "./config";
+import { logger } from "./logger";
+import mongoose from 'mongoose';
 
-export class Observer extends EventEmitter {
-    
-    private static db: DbManager;
+import * as fs from "fs";
+import JSZip   from "jszip";
+
+export class Observer
+{
+    private static timeout = 1000;
+    private static chunk_size = 100;
 
     constructor() {
-        super();
-        Observer.db = new DbManager(config.mongoCredentials.uri);
+        mongoose.connect(config.mongoCredentials.uri, {
+            useNewUrlParser: true,
+            useFindAndModify: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+            connectTimeoutMS: 1000,
+            autoIndex: false
+        });
     }
 
-    watchDir(folder: string | string[]) {
+    public async Observe(dirName: string): Promise<any>
+    {
         try {
-            logger.log("info", `Watching for folder changes on: ${folder}`);
-
-            var watcher = chokidar.watch(folder, {
-                persistent: true
+            let files = fs.readdirSync(dirName);
+            
+            let fbooks: string[] = [];
+            files.forEach((f: string) => {
+                // take every *.fb2 or *.zip, exclude .git*, everything else delete
+                // file with size smaller than 4mb
+                if ((f.indexOf(".fb2") >= 0 || f.indexOf(".zip") >=0) && 
+                     !f.includes(".git")    && fs.statSync(`${dirName}/${f}`)["size"] / 1000000.0 <= 4.0) {
+                        fbooks.push(f);
+                        logger.debug(`Pushed ${f}`);
+                    }
             });
 
-            watcher.on('add', async (filePath: string) => {
-                if (!filePath.includes(".gitignore")) {
-                    logger.log("info", `${filePath} has been added.`);
+            let books: Book[] = [];
+            for (let i = 0, j = fbooks.length; i < j; i += Observer.chunk_size) {
+                logger.debug("Started new chunk..");
+                let chunk = fbooks.slice(i, i + Observer.chunk_size);
 
-                    if (filePath.endsWith('.fb2') || filePath.endsWith('.zip')) {
-                        let parser = new FB2Parser("./" + filePath);
-                        let book = await parser.parse();
+                chunk.forEach((f: string) => {
+                    let parser = new FB2Parser(`${dirName}/${f}`);
+                    
+                    logger.debug(`Start parsing ${f}`);
+                    let book = parser.parse();
+                    logger.info(`Parsed ${book?.title}`);
 
-                        if (book) {
-                            let book_new = await Observer.db.add(book);
+                    if (book) {
+                        books.push(book);
+                        logger.info(`Added ${book.title}`);
+                        logger.debug(`Pushed id: ${book._id}`);
 
-                            if (book_new) {
-                                if (filePath.endsWith(".fb2")) {
-                                    let zip = new AdmZip();
-                                    zip.addLocalFile("./" + filePath);
-                                    zip.writeZip(`./res/${book_new._id}.zip`);
-                                }
+                        if (f.includes(".zip")) {
+                            fs.copyFileSync(`${dirName}/${f}`, `res/${book._id}.zip`);
+                            logger.info(`${book._id}.zip has been written`);
+                        }
+                        else if (f.includes(".fb2")) {
+                            // let zip = new JSZip().file(`${f}`, fs.readFileSync(`${dirName}/${f}`));
+                            let zip = new JSZip().file(`${f}`, Buffer.from(parser.reencodeBook(`${dirName}/${f}`)));
+
+                            zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
+                            .pipe(fs.createWriteStream(`res/${book._id}.zip`))
+                            .on('finish', () => {
+                                logger.debug(`Archine written.`);
+                            });
                             
-                                if (filePath.endsWith(".zip")) {
-                                    await fse.copy(filePath, `./res/${book_new._id}.zip`, {
-                                        overwrite: true
-                                    });
-                                }
-                                logger.log("info", `${filePath} has been saved to ${book_new._id}.zip`);
-                            }
+                            logger.info(`${book._id}.zip was archived and written`);
                         }
                     }
 
-                    await fse.unlink(filePath);
-                    logger.log("info", `${filePath} has been removed.`);
-                }
-            });
-        } catch (error) {
-            logger.error(error);
+                    fs.unlinkSync(`${dirName}/${f}`);
+                    logger.debug("Ended chunk");
+                });
+
+                logger.debug("Started inserting...");
+                await Books.collection.insertMany(books)
+                    .then(
+                        b => {
+                            logger.info("Insertion complete!");
+                            logger.debug(`Inserted id: ${b.insertedIds[0]}`);
+                        }
+                    );
+
+                books = [];
+            }
+
+            if (books.length == 0)
+                logger.info("No new books.");
+
+        } catch (err) {
+            logger.error(err);
         }
+        return require("bluebird").Promise.delay(Observer.timeout).then(() => this.Observe(dirName));
     }
 }
