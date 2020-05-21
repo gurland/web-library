@@ -18,3 +18,15 @@ export function formatGenres(genres) {
 
   return result;
 }
+
+export function formatLangs(langs) {
+  return langs.map(lang => {
+    const [[ key, value ]] = Object.entries(lang);
+
+    return {
+      text: value,
+      value: key,
+      key,
+    }
+  })
+}

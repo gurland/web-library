@@ -13,8 +13,8 @@ export async function getAuthors() {
 
 }
 
-export async function getLangs() {
-
+export async function getLangs(locale = 'uk') {
+  return await get('languages', { language: locale });
 }
 
 async function get(path, queryParams) {

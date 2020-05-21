@@ -6,29 +6,16 @@ import { Dropdown } from 'semantic-ui-react';
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 
-import { formatGenres, getGenres, getLangs, getAuthors } from '../helpers';
+import { formatGenres, formatLangs, getGenres, getLangs, getAuthors } from '../helpers';
 
 export default function FiltersAccordion(props) {
   const [authors, setAuthors] = useState([]);
   const [genres, setGenres] = useState([]);
-  const [langs, setLangs] = useState([
-    {
-      text: 'Російська',
-      value: 'ru',
-    },
-    {
-      text: 'Англійська',
-      value: 'en',
-    },
-    {
-      text: 'Українська',
-      value: 'uk',
-    }
-  ]);
+  const [langs, setLangs] = useState([]);
 
   useEffect(() => {
     getGenres().then(genres => setGenres(formatGenres(genres)));
-    // getLangs().then(genres => setGenres(formatGenres(genres)));
+    getLangs().then(langs => setLangs(formatLangs(langs)));
     // getAuthors().then(genres => setGenres(formatGenres(genres)));
   }, []);
 
@@ -39,8 +26,8 @@ export default function FiltersAccordion(props) {
     selectedGenres: {
       selectedGenres, setSelectedGenres
     },
-    selectedLangs: {
-      selectedLangs, setSelectedLangs
+    selectedLang: {
+      selectedLang, setSelectedLang
     },
     ratings: {
       ratings, setRatings
@@ -96,8 +83,8 @@ export default function FiltersAccordion(props) {
                 search
                 selection
                 options={langs}
-                onChange={(event, data) => setSelectedLangs(data.value)}
-                value={selectedLangs}
+                onChange={(event, data) => setSelectedLang(data.value)}
+                value={selectedLang}
               />
             </Card.Body>
           </Card>
@@ -133,9 +120,9 @@ FiltersAccordion.propTypes = {
     selectedGenres: PropTypes.arrayOf(PropTypes.string).isRequired,
     setSelectedGenres: PropTypes.func.isRequired,
   }).isRequired,
-  selectedLangs: PropTypes.shape({
-    selectedLangs: PropTypes.arrayOf(PropTypes.string).isRequired,
-    setSelectedLangs: PropTypes.func.isRequired,
+  selectedLang: PropTypes.shape({
+    selectedLang: PropTypes.string.isRequired,
+    setSelectedLang: PropTypes.func.isRequired,
   }).isRequired,
   ratings: PropTypes.shape({
     ratings: PropTypes.arrayOf(PropTypes.number).isRequired,

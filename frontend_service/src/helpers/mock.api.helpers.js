@@ -1,4 +1,4 @@
-import { genres, books } from './mock.api.data';
+import { genres, books, languages } from './mock.api.data';
 
 export function getAuthors(query = '') {
   return ['Тарас Шевченко', 'Михайло Коцюбинський', 'Микола Гоголь', 'Лесь Подервянський', 'Говно Говно'];
@@ -16,6 +16,8 @@ export function getBooks() {
   })
 }
 
-export function getLangs() {
-  return ['English', 'Spanish', 'Japanese', 'German'];
+export async function getLangs(locale = 'uk') {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(languages[locale]), 500);
+  });
 }
