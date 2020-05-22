@@ -1,4 +1,4 @@
-import { genres as genresList, books, languages } from './mock.api.data';
+import { genres as genresList, books, book, languages } from './mock.api.data';
 import { addToStorage, getFromStorage } from './localstorage.helpers';
 
 export function getAuthors(query = '') {
@@ -26,6 +26,12 @@ export function getBooks() {
   })
 }
 
+export function getBook(id) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(book), 500);
+  });
+}
+
 export function getLangs(locale = 'uk') {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -39,4 +45,14 @@ export function getLangs(locale = 'uk') {
       resolve(langs)
     }, 500);
   });
+}
+
+export async function getMetadata() {
+  const langsMeta = await getLangs();
+  const genresMeta = await getGenres();
+
+  return {
+    langsMeta,
+    genresMeta: Object.assign({}, ...Object.values(genresMeta)),
+  }
 }

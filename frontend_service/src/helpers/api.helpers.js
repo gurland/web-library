@@ -21,6 +21,10 @@ export async function getAuthors(name = '') {
   return await get('authors', { name });
 }
 
+export async function getBook(id) {
+  return await get(`books/${id}`);
+}
+
 export async function getLangs(locale = 'uk') {
   let langs = getFromStorage('langs');
 
@@ -32,7 +36,17 @@ export async function getLangs(locale = 'uk') {
   return langs;
 }
 
-async function get(path, queryParams) {
+export async function getMetadata() {
+  const langsMeta = await getLangs();
+  const genresMeta = await getGenres();
+
+  return {
+    langsMeta,
+    genresMeta: Object.assign({}, ...Object.values(genresMeta)),
+  }
+}
+
+async function get(path, queryParams = {}) {
   const url = buildUrl(API_URL, {
     path,
     queryParams,
