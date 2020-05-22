@@ -1,4 +1,4 @@
-import { genres as genresList, books, book, languages } from './mock.api.data';
+import { genres as genresList, books, book, languages, reviews } from './mock.api.data';
 import { addToStorage, getFromStorage } from './localstorage.helpers';
 
 export function getAuthors(query = '') {
@@ -44,6 +44,12 @@ export function getLangs(locale = 'uk') {
 
       resolve(langs)
     }, 500);
+  });
+}
+
+export function getReviews(id) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(reviews), 500);
   });
 }
 

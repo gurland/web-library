@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { Container, Spinner, Card, Button } from 'react-bootstrap';
-import { NotFoundSign } from '../components';
+import { Container, Card, Button } from 'react-bootstrap';
+import { NotFoundSign, Spinner} from '../components';
+import CommentSection from './CommentSection';
 
 import {
   clarify,
@@ -45,7 +46,7 @@ export default function BookPage() {
 
   const bookInfo = !Object.keys(book).length ? NotFoundSign : (
     <div className="content-wrapper">
-      <Card>
+      <Card className="book-info">
         <Card.Img
           variant="top"
           src={fromSource(book.book_cover) || notFoundImage}
@@ -113,9 +114,7 @@ export default function BookPage() {
           </a>
         </Card.Body>
       </Card>
-      <Card>
-
-      </Card>
+      <CommentSection bookId={id} />
     </div>
   );
 
@@ -125,10 +124,7 @@ export default function BookPage() {
         <div className="content">
           {
             loading
-              ? <Spinner
-                animation="border"
-                variant="primary"
-              />
+              ? <Spinner />
               : bookInfo
           }
         </div>

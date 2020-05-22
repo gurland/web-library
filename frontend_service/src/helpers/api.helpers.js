@@ -1,6 +1,7 @@
 import { API_URL } from '../constants';
 import buildUrl from 'build-url';
 import { addToStorage, getFromStorage } from './localstorage.helpers';
+import { reviews } from './mock.api.data';
 
 export async function getGenres(language = 'uk') {
   let genres = getFromStorage('genres');
@@ -44,6 +45,10 @@ export async function getMetadata() {
     langsMeta,
     genresMeta: Object.assign({}, ...Object.values(genresMeta)),
   }
+}
+
+export async function getReviews(id) {
+  return await get(`books/${id}/reviews`);
 }
 
 async function get(path, queryParams = {}) {
