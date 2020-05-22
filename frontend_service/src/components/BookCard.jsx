@@ -19,7 +19,7 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
         />
       </div>
       <Card.Body>
-        <Card.Title><a href={book._id}>{ book.title }</a></Card.Title>
+        <Card.Title><a href={`/books/${book._id}`}>{ book.title }</a></Card.Title>
         <Card.Subtitle
           className="mb-2 text-muted"
         >
