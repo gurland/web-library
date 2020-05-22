@@ -47,7 +47,7 @@ export default function SearchResults() {
               />
               : bookCards.length
                   ? bookCards
-                  : null
+                  : <span style={{fontSize: '2rem'}}>Нічого не знайдено...</span>
           }
         </div>
       </Container>
