@@ -46,11 +46,12 @@ export default function BookPage() {
   const bookInfo = !Object.keys(book).length ? NotFoundSign : (
     <div className="content-wrapper">
       <Card>
+        <Card.Img
+          variant="top"
+          src={fromSource(book.book_cover) || notFoundImage}
+        />
         <Card.Body>
-          <Card.Img
-            variant="top"
-            src={fromSource(book.book_cover) || notFoundImage}
-          />
+
           <Card.Title style={{fontSize: '1.5rem'}}>
             {book.title}
           </Card.Title>
