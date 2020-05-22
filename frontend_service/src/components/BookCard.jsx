@@ -10,7 +10,7 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
 
 
   return (
-    <Card key={book._id} className="book-card">
+    <Card className="book-card">
       <div className="img-wrapper">
         <Card.Img
           variant="left"
