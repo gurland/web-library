@@ -12,19 +12,19 @@ function App() {
     <div className="App">
       <Navbar />
       <Switch>
-        <Route path="/" exact>
+        <Route path="/" push exact>
           <Catalog />
         </Route>
-        <Route path="/results">
+        <Route path="/results" push>
           <SearchResults />
         </Route>
-        <Route path="/books/:id">
+        <Route path="/books/:id" push>
           <BookPage />
         </Route>
-        <Route path="/registration">
+        <Route path="/registration" push>
           <RegistrationPage />
         </Route>
-        <Route path="/login">
+        <Route path="/login" push>
           <LoginPage />
         </Route>
       </Switch>
