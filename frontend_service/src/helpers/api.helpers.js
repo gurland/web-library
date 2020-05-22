@@ -17,8 +17,8 @@ export async function getBooks(filters = {}) {
   return await get('books', filters);
 }
 
-export async function getAuthors() {
-
+export async function getAuthors(name = '') {
+  return await get('authors', { name });
 }
 
 export async function getLangs(locale = 'uk') {

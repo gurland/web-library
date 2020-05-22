@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Accordion, Button, Card, Form } from 'react-bootstrap';
-import { Dropdown } from 'semantic-ui-react';
+import { SearchDropdown } from '../components';
+
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 
-import { formatGenres, formatLangs, getGenres, getLangs, getAuthors } from '../helpers';
+import { formatGenres, formatLangs, formatAuthors, getGenres, getLangs, getAuthors } from '../helpers';
 
 export default function FiltersAccordion(props) {
   const [authors, setAuthors] = useState([]);
@@ -16,7 +17,7 @@ export default function FiltersAccordion(props) {
   useEffect(() => {
     getGenres().then(genres => setGenres(formatGenres(genres)));
     getLangs().then(langs => setLangs(formatLangs(langs)));
-    // getAuthors().then(genres => setGenres(formatGenres(genres)));
+
   }, []);
 
   const {
@@ -33,6 +34,8 @@ export default function FiltersAccordion(props) {
       ratings, setRatings
     }
   } = props;
+
+  let timeoutId;
 
   const handleRatingChange = ([start, end]) => {
     setRatings([
@@ -55,33 +58,34 @@ export default function FiltersAccordion(props) {
         <div className="filters">
           <Card className="column-1">
             <Card.Body>
-              <Dropdown
+              <SearchDropdown
                 placeholder='Автори'
-                fluid
-                multiple
-                search
-                selection
+                multiple={true}
                 options={authors}
                 onChange={(event, data) => setSelectedAuthors(data.value)}
+                onSearchChange={(event, data) => {
+                  if(!data.searchQuery) {
+                    setAuthors([]);
+                  } else {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => {
+                      getAuthors(data.searchQuery).then(authors => setAuthors(formatAuthors(authors)));
+                    }, 250)
+                  }
+                }}
                 value={selectedAuthors}
               />
-              <Dropdown
+              <SearchDropdown
                 placeholder='Жанри'
-                fluid
-                multiple
-                search
-                selection
+                multiple={true}
                 options={genres}
                 onChange={(event, data) => {
                   if(data.value.length <= 5) setSelectedGenres(data.value);
                 }}
                 value={selectedGenres}
               />
-              <Dropdown
+              <SearchDropdown
                 placeholder='Мови'
-                fluid
-                search
-                selection
                 options={langs}
                 onChange={(event, data) => setSelectedLang(data.value)}
                 value={selectedLang}
