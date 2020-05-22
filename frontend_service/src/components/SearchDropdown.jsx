@@ -23,7 +23,7 @@ function SearchDropdown({ placeholder, options, value, multiple, onChange, addit
 SearchDropdown.propTypes = {
   placeholder: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  value: PropTypes.arrayOf(PropTypes.string).isRequired,
+  value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]).isRequired,
   multiple: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   additionalProps: PropTypes.shape({}),
