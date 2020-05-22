@@ -23,6 +23,17 @@ app.get('/api/v1/genres', function (req, res) {
     }
 })
 
+app.get('/api/v1/languages', function (req, res) {
+    let languageCode = req.query.language;
+    if (isLanguageValid(languageCode)){
+        res.json(
+            queries.getLocalizedLanguages(languageCode)
+        )
+    } else {
+        res.status(400).json({'message': 'invalid language code'})
+    }
+})
+
 app.get('/api/v1/authors', function (req, res) {
     let namePart = req.query.name;
     let limit = parseInt(req.query.limit) || 20;

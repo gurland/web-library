@@ -1,12 +1,17 @@
 const makeSafeRegexp = require('./utils.js').makeSafeRegexp;
 const isLanguageValid = require('iso-639-1').validate;
 const GENRES = require('./utils.js').GENRES;
+const LANGUAGES = require('./utils.js').LANGUAGES;
 
 const MongoClient = require('mongodb').MongoClient;
 const MongoURI = process.env.MONGO_URI || 'mongodb://root:test@localhost:27777/books?authSource=books'
 
 function getLocalizedGenres(languageCode){
     return GENRES[languageCode] || {}
+}
+
+function getLocalizedLanguages(languageCode){
+    return LANGUAGES[languageCode] || {}
 }
 
 async function searchBooks(titlePart, authors, genres, languageCode, minRating, maxRating, limit){
@@ -61,7 +66,8 @@ async function getAuthorsSuggestions(namePart, limit=20) {
 
 module.exports = {
     getLocalizedGenres,
+    getLocalizedLanguages,
     getAuthorsSuggestions,
     getBookById,
-    searchBooks
+    searchBooks    
 }
