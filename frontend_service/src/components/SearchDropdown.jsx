@@ -26,11 +26,12 @@ SearchDropdown.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string).isRequired,
   multiple: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
-  additionalProps: PropTypes.shape({}).isRequired,
+  additionalProps: PropTypes.shape({}),
 }
 
 SearchDropdown.defaultProps = {
   multiple: false,
+  additionalProps: {},
 }
 
 export default SearchDropdown;

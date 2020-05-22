@@ -63,14 +63,16 @@ export default function FiltersAccordion(props) {
                 multiple={true}
                 options={authors}
                 onChange={(event, data) => setSelectedAuthors(data.value)}
-                onSearchChange={(event, data) => {
-                  if(!data.searchQuery) {
-                    setAuthors([]);
-                  } else {
-                    clearTimeout(timeoutId);
-                    timeoutId = setTimeout(() => {
-                      getAuthors(data.searchQuery).then(authors => setAuthors(formatAuthors(authors)));
-                    }, 250)
+                additionalProps={{
+                  onSearchChange: (event, data) => {
+                    if(!data.searchQuery) {
+                      setAuthors([]);
+                    } else {
+                      clearTimeout(timeoutId);
+                      timeoutId = setTimeout(() => {
+                        getAuthors(data.searchQuery).then(authors => setAuthors(formatAuthors(authors)));
+                      }, 250)
+                    }
                   }
                 }}
                 value={selectedAuthors}
