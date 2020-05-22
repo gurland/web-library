@@ -1,7 +1,7 @@
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
+import { Spinner as BootstrapSpinner } from 'react-bootstrap';
 
-const Spinner = () => <Spinner
+const Spinner = () => <BootstrapSpinner
   animation="border"
   variant="primary"
 />;
