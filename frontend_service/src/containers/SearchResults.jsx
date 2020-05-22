@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Spinner } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
-import { BookCard, NotFoundSign } from '../components';
+import { BookCard, NotFoundSign, Spinner } from '../components';
 
 import { getBooks, getLangs, getGenres } from '../helpers';
 import { useQuery } from '../hooks';
@@ -41,10 +41,7 @@ export default function SearchResults() {
         <div className="content">
           {
             loading
-              ? <Spinner
-                animation="border"
-                variant="primary"
-              />
+              ? <Spinner />
               : bookCards.length
                   ? bookCards
                   : <NotFoundSign />
