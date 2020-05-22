@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 
-import { BookCard } from '../components';
+import { BookCard, NotFoundSign } from '../components';
 
 import { getBooks, getLangs, getGenres } from '../helpers';
 import { useQuery } from '../hooks';
@@ -47,7 +47,7 @@ export default function SearchResults() {
               />
               : bookCards.length
                   ? bookCards
-                  : <span style={{fontSize: '2rem'}}>Нічого не знайдено...</span>
+                  : <NotFoundSign />
           }
         </div>
       </Container>
