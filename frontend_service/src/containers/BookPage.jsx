@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { Container, Spinner, Card } from 'react-bootstrap';
+import { Container, Spinner, Card, Button } from 'react-bootstrap';
 import { NotFoundSign } from '../components';
 
 import {
@@ -107,6 +107,10 @@ export default function BookPage() {
               </Card.Subtitle>
             )
           }
+          <hr/>
+          <a href={`/reader?bookId=${book._id}`}>
+            <Button variant="primary" style={{width: '100%'}}>Читати онлайн</Button>
+          </a>
         </Card.Body>
       </Card>
       <Card>
