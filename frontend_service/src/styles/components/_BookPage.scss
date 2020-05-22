@@ -1,0 +1,11 @@
+.book-page {
+  padding-top: 3.5rem;
+
+  .container {
+    height: calc(100vh - 3.5rem);
+  }
+
+  .content {
+    border: solid red 1px;
+  }
+}

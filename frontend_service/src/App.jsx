@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import { Navbar } from './components';
-import { Catalog, SearchResults, RegistrationPage, LoginPage } from './containers';
+import { Catalog, SearchResults, RegistrationPage, LoginPage, BookPage } from './containers';
 
 import 'semantic-ui-css/semantic.min.css';
 import './styles/App.scss';
@@ -14,10 +14,12 @@ function App() {
       <Switch>
         <Route path="/" exact>
           <Catalog />
-          {/*<SearchResults />*/}
         </Route>
         <Route path="/results">
           <SearchResults />
+        </Route>
+        <Route path="/books/:id">
+          <BookPage />
         </Route>
         <Route path="/registration">
           <RegistrationPage />
