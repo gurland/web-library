@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 import { Container, Card, Button } from 'react-bootstrap';
+import ReactStars from 'react-stars';
+
 import { NotFoundSign, Spinner} from '../components';
 import CommentSection from './CommentSection';
 
@@ -108,6 +110,13 @@ export default function BookPage() {
               </Card.Subtitle>
             )
           }
+          <hr/>
+          <Card.Subtitle>
+            Переглянуто: {book.view_count}
+          </Card.Subtitle>
+          <div className="book-rating">
+            <ReactStars size={36} half={true} edit={false} value={book.avg_rating}/>
+          </div>
           <hr/>
           <a href={`/reader?bookId=${book._id}`}>
             <Button variant="primary" style={{width: '100%'}}>Читати онлайн</Button>
