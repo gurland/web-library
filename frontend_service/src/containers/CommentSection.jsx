@@ -25,7 +25,7 @@ export default function CommentSection({ bookId }) {
       .then(() => setLoading(false));
   }
 
-  const reviewComponents = reviews.map(review => <Review review={review}/>);
+  const reviewComponents = reviews.map(review => <Review review={review} key={review.id}/>);
 
   return (
     <>
