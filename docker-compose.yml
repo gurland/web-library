@@ -25,6 +25,9 @@ services:
       MONGO_URI: "mongodb://root:test@mongo:27017/books?authSource=books"
     volumes: 
       - ./api_service:/app
+    
+    depends_on:
+      - mongo
 
   books_updater:
     build: ./books_updater_service/
@@ -33,6 +36,9 @@ services:
     - ./books_updater_service/upload:/app/upload
     environment: 
       MONGO_URI: "mongodb://root:test@mongo:27017/books?authSource=books"
+    
+    depends_on:
+        - mongo
 
   mongo:
     build: ./mongo_service/
