@@ -52,10 +52,23 @@ export async function getReviews(bookId) {
 }
 
 export async function postReview(bookId, text, rating) {
+  const accessToken = getFromStorage('accessToken');
+
   return await post(`books/${bookId}/reviews`, {
     text,
     rating,
-  });
+  }, { Authorization: `Bearer ${accessToken}` });
+}
+
+export async function authorize(username, password) {
+  const response = await post(
+    'auth/login',
+    { name: username, password }
+  );
+
+  const { access_token } = response;
+
+  addToStorage('accessToken', access_token);
 }
 
 async function get(path, queryParams = {}) {
@@ -68,11 +81,14 @@ async function get(path, queryParams = {}) {
   return await response.json();
 }
 
-async function post(path, body) {
-  const response = await fetch(path, {
+async function post(path, body, headers = {}) {
+  const url = buildUrl(API_URL, { path });
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...headers,
     },
     body: JSON.stringify(body),
   });

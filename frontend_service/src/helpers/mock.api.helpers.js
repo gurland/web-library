@@ -66,3 +66,10 @@ export async function getMetadata() {
     genresMeta: Object.assign({}, ...Object.values(genresMeta)),
   }
 }
+
+export function authorize(username, password) {
+  return new Promise(resolve => setTimeout(() => {
+    addToStorage('accessToken', 'secret_token');
+    resolve();
+  }, 500));
+}
