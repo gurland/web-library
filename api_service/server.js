@@ -11,7 +11,7 @@ const { JWTSECRET, authMiddleware, generateAccessToken } = require('./utils.js')
 const jwtMiddleware = expressJWT({ secret: JWTSECRET });
 
 const app = express();
-const port = 8099;
+const port = 80;
 
 app.use(cors());
 app.use(bodyParser.json())
