@@ -20,7 +20,7 @@ async function searchBooks(titlePart, authors, genres, languageCode, minRating, 
     
     const aggregations = [
         ... titlePart ? [{$match: {title: { $regex : makeSafeRegexp(titlePart)}}}] : [],
-        ... authors.length > 0 ? [{$match: {author: {$all: authors}}}] : [],
+        ... authors.length > 0 ? [{$match: {authors: {$all: authors}}}] : [],
         ... genres.length > 0 ? [{$match: {genres: {$all: genres}}}] : [],
         ... isLanguageValid(languageCode) ? [{$match: {lang: languageCode}}] : [],
         ... (0 < minRating && maxRating < 10) ? [{$match: {avg_rating: {$gt : minRating, $lt : maxRating}}}] : [],
