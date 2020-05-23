@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { Card, InputGroup, Form, Button } from 'react-bootstrap';
 import ReactStars from 'react-stars';
 
+import { Context } from '../App';
+
 export default function ReviewInput({ onSubmit }) {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
+  const ctx = useContext(Context);
+
+  const button = ctx.authorized ? (
+    <Button
+      variant="primary"
+      onClick={() => onSubmit(reviewText, rating)}
+    >
+      Надіслати
+    </Button>
+  ) : (
+    <Button variant="primary" disabled>
+      Увійдіть щоб надіслати
+    </Button>
+  );
 
   return (
     <Card body className="review-input">
@@ -20,12 +36,7 @@ export default function ReviewInput({ onSubmit }) {
       </InputGroup>
       <div className="controls-wrapper">
         <ReactStars half={true} size={36} value={rating} onChange={(newRating) => setRating(newRating)} />
-        <Button
-          variant="primary"
-          onClick={() => onSubmit(reviewText, rating)}
-        >
-          Відправити
-        </Button>
+        {button}
       </div>
     </Card>
   );
