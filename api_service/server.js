@@ -4,9 +4,14 @@ const { check, validationResult } = require('express-validator');
 const isLanguageValid = require('iso-639-1').validate;
 const queries = require('./queries.js');
 const cors = require('cors');
+const expressJWT = require('express-jwt');
+
+const { JWTSECRET, authMiddleware, generateAccessToken } = require('./utils.js');
+
+const jwtMiddleware = expressJWT({ secret: JWTSECRET });
 
 const app = express();
-const port = 80;
+const port = 8099;
 
 app.use(cors());
 app.use(bodyParser.json())
@@ -88,7 +93,7 @@ app.get('/api/v1/books/:bookId/reviews', function (req, res) {
     res.send('book rewiews!')
 })
 
-app.post('/api/v1/books/:bookId/reviews', function (req, res) {
+app.post('/api/v1/books/:bookId/reviews', jwtMiddleware, authMiddleware, function (req, res) {
     res.send('add book rewiew!')
 })
 
@@ -105,12 +110,15 @@ app.post('/api/v1/auth/register', [
     let name = req.body.name;
     let password = req.body.password;
 
-
-    res.send('add book rewiew!')
+    res.json({"access_token": generateAccessToken(name)});
 })
 
-app.post('/api/v1/auth/login', function (req, res) {
-    res.send('add book rewiew!')
+app.post('/api/v1/auth/login', [
+    check('name').isAlphanumeric(),
+    check('password').isLength({ min: 5 })
+  ], 
+  function (req, res) {
+    res.json({"access_token": generateAccessToken(req.body.name)});
 })
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
