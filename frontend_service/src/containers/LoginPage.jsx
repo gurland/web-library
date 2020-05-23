@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
 import { Redirect } from 'react-router-dom';
 
-import ValidatableForm from '../components/ValidatableForm';
-import ValidatableInput from '../components/ValidatableInput';
+import { ValidatableForm, ValidatableInput } from '../components';
+import { authorize } from '../helpers';
+import { Context } from '../App';
 
 export default function LoginPage() {
   const [authorized, setAuthorized] = useState(false);
+  const ctx = useContext(Context);
 
   const {
     values: {
@@ -35,7 +36,11 @@ export default function LoginPage() {
         .required('Будь ласка, введіть пароль!'),
     }),
     onSubmit: async (values) => {
+      const { username, password } = values;
+      await authorize(username, password);
+      setAuthorized(true);
 
+      ctx.setAuthorized(true);
     },
   });
 

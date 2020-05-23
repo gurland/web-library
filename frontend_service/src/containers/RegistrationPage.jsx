@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { Redirect } from 'react-router-dom';
 
-import ValidatableForm from '../components/ValidatableForm';
-import ValidatableInput from '../components/ValidatableInput';
+import { ValidatableForm, ValidatableInput } from '../components';
+import { authorize } from '../helpers';
+import { Context } from '../App';
 
 export default function RegPage() {
   const [authorized, setAuthorized] = useState(false);
+  const ctx = useContext(Context);
 
   const {
     isSubmitting,
@@ -42,7 +44,11 @@ export default function RegPage() {
         .required('Будь ласка, уведіть пароль ще раз!'),
     }),
     onSubmit: async (values) => {
-      // save token to ls
+      const { username, password } = values;
+      await authorize(username, password);
+      setAuthorized(true);
+
+      ctx.setAuthorized(true);
     },
   });
 
