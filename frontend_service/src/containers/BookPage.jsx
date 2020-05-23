@@ -20,7 +20,7 @@ import {
 import notFoundImage from '../assets/images/404.jpg';
 
 export default function BookPage() {
-  const [book, setBook] = useState({});
+  const [book, setBook] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [langsMeta, setLangsMeta] = useState([]);
@@ -43,10 +43,10 @@ export default function BookPage() {
     });
   }, []);
 
-  const genres = book.genres && clarify(book.genres.map(genre => genresMeta[genre]));
-  const lang = book.lang && findMeta(langsMeta, book.lang);
+  const genres = book && clarify(book.genres.map(genre => genresMeta[genre]));
+  const lang = book && findMeta(langsMeta, book.lang);
 
-  const bookInfo = !Object.keys(book).length ? NotFoundSign : (
+  const bookInfo = !book ? <NotFoundSign /> : (
     <div className="content-wrapper">
       <Card className="book-info">
         <Card.Img
