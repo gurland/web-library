@@ -3,12 +3,18 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import ReactStars from 'react-stars'
 
+import { getFullDate } from '../helpers';
+
 export default function Review({ review }) {
   return (
     <Card className="review">
-      <Card.Title>
-        {review.author}
-      </Card.Title>
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+        <Card.Title>
+          {review.author}
+        </Card.Title>
+        <span style={{marginLeft: '0.5rem'}}>({getFullDate(new Date(review.date))})</span>
+      </div>
+
       <Card.Subtitle>
         <ReactStars
           value={review.rating}
