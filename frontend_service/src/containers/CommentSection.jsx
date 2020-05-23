@@ -17,6 +17,8 @@ export default function CommentSection({ bookId }) {
   }, [])
 
   function submitReview(text, rating) {
+    if(!(text.trim()) || !rating) return;
+
     setLoading(true);
     postReview(bookId, text, rating)
       .then(() => getReviews(bookId).then(reviews => setReviews(reviews)))
