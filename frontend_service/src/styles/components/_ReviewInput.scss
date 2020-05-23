@@ -1,0 +1,16 @@
+.review-input {
+  margin-left: 1rem;
+  margin-top: 1rem;
+
+  .controls-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    justify-content: flex-end;
+
+    button {
+      margin-left: 2rem;
+      width: 20%;
+    }
+  }
+}

@@ -8,11 +8,11 @@ import { getFullDate } from '../helpers';
 export default function Review({ review }) {
   return (
     <Card className="review">
-      <div style={{display: 'flex', flexDirection: 'row'}}>
+      <div className="title-wrapper">
         <Card.Title>
           {review.author}
         </Card.Title>
-        <span style={{marginLeft: '0.5rem'}}>({getFullDate(new Date(review.date))})</span>
+        <span>({getFullDate(new Date(review.date))})</span>
       </div>
 
       <Card.Subtitle>
