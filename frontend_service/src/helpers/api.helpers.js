@@ -47,8 +47,15 @@ export async function getMetadata() {
   }
 }
 
-export async function getReviews(id) {
-  return await get(`books/${id}/reviews`);
+export async function getReviews(bookId) {
+  return await get(`books/${bookId}/reviews`);
+}
+
+export async function postReview(bookId, text, rating) {
+  return await post(`books/${bookId}/reviews`, {
+    text,
+    rating,
+  });
 }
 
 async function get(path, queryParams = {}) {
@@ -67,7 +74,7 @@ async function post(path, body) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body,
+    body: JSON.stringify(body),
   });
 
   return await response.json();

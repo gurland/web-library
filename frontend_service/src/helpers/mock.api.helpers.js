@@ -53,6 +53,10 @@ export function getReviews(id) {
   });
 }
 
+export function postReview(text, rating) {
+  return new Promise(resolve => setTimeout(() => resolve(), 500))
+}
+
 export async function getMetadata() {
   const langsMeta = await getLangs();
   const genresMeta = await getGenres();
