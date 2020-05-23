@@ -24,7 +24,7 @@ async function searchBooks(titlePart, authors, genres, languageCode, minRating, 
         ... genres.length > 0 ? [{$match: {genres: {$all: genres}}}] : [],
         ... isLanguageValid(languageCode) ? [{$match: {lang: languageCode}}] : [],
         ... (0 < minRating && maxRating < 10) ? [{$match: {avg_rating: {$gt : minRating, $lt : maxRating}}}] : [],
-        {$limit : limit}        
+        {$limit : limit}
     ];
 
     let books = booksDb.collection('books').aggregate(aggregations).toArray();
@@ -50,12 +50,12 @@ async function getAuthorsSuggestions(namePart, limit=20) {
     let booksDb = db.db("books");
 
     let aggregationResult = booksDb.collection('books').aggregate([
-        {$match: {author: {$elemMatch: { $regex : regexp}}}},
+        {$match: {authors: {$elemMatch: { $regex : regexp}}}},
         {$limit : limit},
-        {$unwind: {path: "$author"}},
+        {$unwind: {path: "$authors"}},
         {$group: {
             _id: null,
-            uniqueAuthors: { $addToSet: '$author' }
+            uniqueAuthors: { $addToSet: '$authors' }
           }
         },
         
