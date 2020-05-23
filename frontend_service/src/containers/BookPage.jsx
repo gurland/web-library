@@ -61,7 +61,7 @@ export default function BookPage() {
             className="mb-2 text-muted"
           >
             {
-              joinComponents(createLinks(book.author, 'authors')) //todo change author to authors
+              joinComponents(createLinks(book.authors, 'authors'))
             }
           </Card.Subtitle>
           <hr/>

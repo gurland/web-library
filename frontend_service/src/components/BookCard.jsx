@@ -24,7 +24,7 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
           className="mb-2 text-muted"
         >
           {
-            joinComponents(createLinks(book.author, 'authors')) //todo change author to authors
+            joinComponents(createLinks(book.authors, 'authors'))
           }
         </Card.Subtitle>
         <hr/>
