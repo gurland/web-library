@@ -55,3 +55,22 @@ export function getKeyByValue(obj, value) {
 export function clarify(array = []) {
   return array.filter(el => !!el)
 }
+
+export function getFullDate (dateObj = new Date())  {
+  const _format = (...values) => values.map(value => value > 9 ? value : '0' + value);
+
+  const year = dateObj.getFullYear();
+  const [
+    month,
+    day,
+    hours,
+    minutes
+  ] = _format(
+    dateObj.getMonth() + 1,
+    dateObj.getDate(),
+    dateObj.getHours(),
+    dateObj.getMinutes()
+  );
+
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+}
