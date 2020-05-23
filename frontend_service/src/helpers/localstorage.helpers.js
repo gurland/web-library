@@ -5,6 +5,10 @@ export function addToStorage(key, data) {
   localStorage.setItem(`${LOCALSTORAGE_KEY}:${key}`, dataToSave);
 }
 
+export function deleteFromStorage(key) {
+  localStorage.removeItem(`${LOCALSTORAGE_KEY}:${key}`);
+}
+
 export function getFromStorage(key) {
   let data = localStorage.getItem(`${LOCALSTORAGE_KEY}:${key}`)
 

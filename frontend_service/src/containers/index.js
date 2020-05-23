@@ -3,6 +3,7 @@ import FiltersAccordion from './FiltersAccordion';
 import RegistrationPage from './RegistrationPage';
 import SearchResults from './SearchResults';
 import LoginPage from './LoginPage';
+import BookPage from './BookPage';
 
 export {
   Catalog,
@@ -10,4 +11,5 @@ export {
   RegistrationPage,
   SearchResults,
   LoginPage,
+  BookPage,
 };

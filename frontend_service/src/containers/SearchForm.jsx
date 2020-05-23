@@ -24,7 +24,7 @@ export default function SearchForm() {
           search: buildUrl({
             queryParams: normalize({
               title: query,
-              authors: selectedAuthors,
+              authors: selectedAuthors.length ? selectedAuthors : null,
               genres: selectedGenres.join(','),
               language: selectedLang,
               minRating: ratings[0],

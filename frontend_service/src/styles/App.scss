@@ -4,12 +4,25 @@
 //}
 @import "~bootstrap/scss/bootstrap";
 @import "components";
+@import "mixins";
 
 .container{
   display: flex;
   justify-content: center;
 }
 
+.content {
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  @include flex(column, unset);
+}
+
 .text-muted.error{
   color: darkred !important;
+}
+
+textarea {
+  resize: none;
 }

@@ -30,3 +30,11 @@ export function formatLangs(langs) {
     }
   })
 }
+
+export function formatAuthors(authors) {
+  return authors.map(author => ({
+    text: author,
+    value: author,
+    key: author,
+  }))
+}

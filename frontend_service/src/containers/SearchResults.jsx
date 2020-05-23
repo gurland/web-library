@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 
-import BookCard from '../components/BookCard';
+import { BookCard, NotFoundSign, Spinner } from '../components';
 
 import { getBooks, getLangs, getGenres } from '../helpers';
 import { useQuery } from '../hooks';
@@ -10,6 +10,7 @@ export default function SearchResults() {
   const [books, setBooks] = useState([]);
   const [langsMeta, setLangsMeta] = useState([]);
   const [genresMeta, setGenresMeta] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const filters = useQuery();
 
@@ -17,23 +18,33 @@ export default function SearchResults() {
     Promise.all([
       getLangs().then(langsMeta => setLangsMeta(langsMeta)),
       getGenres().then(genres => setGenresMeta(Object.assign({}, ...Object.values(genres)))),
-    ]).then(() => getBooks(filters).then(books => setBooks(books)))
+    ]).then(() => getBooks(filters).then(books => {
+      setBooks(books)
+      setLoading(false);
+    }))
   }, []);
+
+  const bookCards = books.map(book => {
+    return (
+      <BookCard
+        book={book}
+        langsMeta={langsMeta}
+        genresMeta={genresMeta}
+        key={book._id}
+      />
+    );
+  })
 
   return (
     <div className="results-page">
       <Container>
         <div className="content">
           {
-            !books.length ? 'loading...' : books.map(book => {
-              return (
-                <BookCard
-                  book={book}
-                  langsMeta={langsMeta}
-                  genresMeta={genresMeta}
-                />
-              );
-            })
+            loading
+              ? <Spinner />
+              : bookCards.length
+                  ? bookCards
+                  : <NotFoundSign />
           }
         </div>
       </Container>
