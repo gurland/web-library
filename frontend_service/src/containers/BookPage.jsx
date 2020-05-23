@@ -54,7 +54,6 @@ export default function BookPage() {
           src={fromSource(book.book_cover) || notFoundImage}
         />
         <Card.Body>
-
           <Card.Title style={{fontSize: '1.5rem'}}>
             {book.title}
           </Card.Title>
