@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser')
+const { check, validationResult } = require('express-validator');
 const isLanguageValid = require('iso-639-1').validate;
 const queries = require('./queries.js');
 const cors = require('cors');
@@ -7,6 +9,7 @@ const app = express();
 const port = 80;
 
 app.use(cors());
+app.use(bodyParser.json())
 
 app.get('/api/v1/test', function (req, res) {
     res.send('API service is running!')
@@ -86,6 +89,27 @@ app.get('/api/v1/books/:bookId/reviews', function (req, res) {
 })
 
 app.post('/api/v1/books/:bookId/reviews', function (req, res) {
+    res.send('add book rewiew!')
+})
+
+app.post('/api/v1/auth/register', [
+    check('name').isAlphanumeric(),
+    check('password').isLength({ min: 5 })
+  ], 
+  function (req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    let name = req.body.name;
+    let password = req.body.password;
+
+
+    res.send('add book rewiew!')
+})
+
+app.post('/api/v1/auth/login', function (req, res) {
     res.send('add book rewiew!')
 })
 
