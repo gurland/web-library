@@ -36,8 +36,8 @@ export default function RegPage() {
       username: Yup.string()
         .required('Будь ласка, введіть ім\'я користувача!'),
       password: Yup.string()
-        .min(6, 'Пароль занадто короткий!')
-        .max(30, 'Пароль занадто довгий!')
+        .min(5, 'Пароль занадто короткий!')
+        .max(72, 'Пароль занадто довгий!')
         .required('Будь ласка, введіть пароль!'),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Паролі не збігаються!')
