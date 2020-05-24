@@ -12,7 +12,7 @@ const { authMiddleware, generateAccessToken } = require('./utils.js');
 const jwtMiddleware = expressJWT({ secret: JWTSECRET });
 
 const app = express();
-const port = 80;
+const port = 8099;
 
 app.use(cors());
 app.use(bodyParser.json())
@@ -102,7 +102,7 @@ app.post('/api/v1/auth/register', [
     check('name').isAlphanumeric(),
     check('password').isLength({ min: 5 })
   ], 
-  function (req, res) {
+  async function (req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -110,16 +110,41 @@ app.post('/api/v1/auth/register', [
 
     let name = req.body.name;
     let password = req.body.password;
-
-    res.json({"access_token": generateAccessToken(name)});
+    
+    try{
+        await queries.addUser(name, password);
+        return res.json({"access_token": generateAccessToken(name)});
+    } catch (err){
+        if (err.code === 11000){
+            return res.status(409).json({'message': "Username is not unique"})
+        }
+        return res.status(422).json({'message': err.message})
+    }
 })
 
 app.post('/api/v1/auth/login', [
     check('name').isAlphanumeric(),
     check('password').isLength({ min: 5 })
   ], 
-  function (req, res) {
-    res.json({"access_token": generateAccessToken(req.body.name)});
+  async function (req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    let name = req.body.name;
+    let password = req.body.password;
+    
+    try{
+        let passwordMatched = await queries.isUserPasswordCorrect(name, password);
+        if (passwordMatched){
+            return res.json({"access_token": generateAccessToken(name)})
+        } else {
+            res.status(400).json({'message': "Wrong credentials!"})
+        }
+    } catch (err){
+        return res.status(422).json({'message': err.message})
+    }
 })
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

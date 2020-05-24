@@ -1,5 +1,8 @@
-const makeSafeRegexp = require('./utils.js').makeSafeRegexp;
+const bcrypt = require('bcrypt');
+
 const isLanguageValid = require('iso-639-1').validate;
+const makeSafeRegexp = require('./utils.js').makeSafeRegexp;
+
 const GENRES = require('./utils.js').GENRES;
 const LANGUAGES = require('./utils.js').LANGUAGES;
 
@@ -12,6 +15,39 @@ function getLocalizedGenres(languageCode){
 
 function getLocalizedLanguages(languageCode){
     return LANGUAGES[languageCode] || {}
+}
+
+async function addUser(name, password){
+    let hashedPass = await bcrypt.hash(password, 10);
+
+    let db = await MongoClient.connect(MongoURI);
+    let booksDb = db.db("books");
+
+    booksDb.collection('users').ensureIndex("name", {unique: true})
+
+    let insetionResult = booksDb.collection('users').insertOne({
+        name: name,
+        password: hashedPass
+    });
+    
+    db.close();
+    return insetionResult;
+}
+
+async function isUserPasswordCorrect(name, password){
+    let db = await MongoClient.connect(MongoURI);
+    let booksDb = db.db("books");
+
+    booksDb.collection('users').ensureIndex("name", {unique: true})
+        
+    let userDoc = await booksDb.collection('users').findOne({ name: name });
+
+    if (userDoc){
+        passwordHash = userDoc.password
+
+        let passwordsMatched = await bcrypt.compare(password, passwordHash);
+        return passwordsMatched
+    }
 }
 
 async function searchBooks(titlePart, authors, genres, languageCode, minRating, maxRating, limit){
@@ -69,5 +105,7 @@ module.exports = {
     getLocalizedLanguages,
     getAuthorsSuggestions,
     getBookById,
-    searchBooks    
+    searchBooks,
+    addUser,
+    isUserPasswordCorrect
 }
