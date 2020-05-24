@@ -6,7 +6,8 @@ const queries = require('./queries.js');
 const cors = require('cors');
 const expressJWT = require('express-jwt');
 
-const { JWTSECRET, authMiddleware, generateAccessToken } = require('./utils.js');
+const { JWTSECRET } = require('./config.js');
+const { authMiddleware, generateAccessToken } = require('./utils.js');
 
 const jwtMiddleware = expressJWT({ secret: JWTSECRET });
 

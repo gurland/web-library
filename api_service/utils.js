@@ -1,9 +1,6 @@
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-const GENRES = JSON.parse(fs.readFileSync(__dirname + '/genres.json', 'utf8'));
-const LANGUAGES = JSON.parse(fs.readFileSync(__dirname + '/languages.json', 'utf8'));
-const JWTSECRET = process.env.JWT_SECRET || 'superTestJWTtoken';
+const { JWTSECRET } = require("./config");
 
 function makeSafeRegexp(substring) {
     return new RegExp(substring.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'i');
@@ -11,16 +8,16 @@ function makeSafeRegexp(substring) {
 
 function authMiddleware (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-        res.status(401).send('invalid token');
+        res.status(401).json({'message': err.message});
     }
 }
 
 function generateAccessToken(username) {
-    // expires after half and hour (1800 seconds = 30 minutes)
-    return jwt.sign(username, JWTSECRET); // { expiresIn: '14d' }
+    return jwt.sign({"name": username}, JWTSECRET, { expiresIn: "14d" });
 }
 
 module.exports = {
-    makeSafeRegexp, authMiddleware, generateAccessToken,
-    GENRES, LANGUAGES, JWTSECRET
+    makeSafeRegexp, 
+    authMiddleware, 
+    generateAccessToken
 };
