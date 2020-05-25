@@ -6,13 +6,12 @@ const queries = require('./queries.js');
 const cors = require('cors');
 const expressJWT = require('express-jwt');
 
-const { JWTSECRET } = require('./config.js');
+const { JWTSECRET, PORT } = require('./config.js');
 const { authMiddleware, generateAccessToken } = require('./utils.js');
 
 const jwtMiddleware = expressJWT({ secret: JWTSECRET });
 
 const app = express();
-const port = 80;
 
 app.use(cors());
 app.use(bodyParser.json())
@@ -67,7 +66,7 @@ app.get('/api/v1/books', function (req, res) {
     let language = req.query.language;
     let title = req.query.title;
     let minRating = parseFloat(req.query.minRating) || 0;
-    let maxRating = parseFloat(req.query.maxRating) || 0;
+    let maxRating = parseFloat(req.query.maxRating) || 10;
     let limit = parseInt(req.query.limit) || 20;
 
     queries.searchBooks(title, authors, genres, language, minRating, maxRating, limit).then(function(booksResult){
@@ -104,9 +103,12 @@ app.post('/api/v1/books/:bookId/reviews', [
     let rating = req.body.rating;
     let bookId = req.params.bookId || "";
 
-    let newReview = await queries.addBookReview(bookId, req.user.name, text, rating);
-
-    res.json(newReview.value)
+    try{
+        await queries.addBookReview(bookId, req.user.name, text, rating);
+        res.status(200).json({"message": "Review added!"});
+    } catch (err) {
+        res.status(400).json({"message": err.message})
+    }
 })
 
 app.post('/api/v1/auth/register', [
@@ -158,4 +160,4 @@ app.post('/api/v1/auth/login', [
     }
 })
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(PORT, () => console.log(`Example app listening at http://localhost:${PORT}`))
