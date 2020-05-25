@@ -90,12 +90,23 @@ app.get('/api/v1/books/:bookId', function (req, res) {
     });
 })
 
-app.get('/api/v1/books/:bookId/reviews', function (req, res) {
-    res.send('book rewiews!')
-})
+app.post('/api/v1/books/:bookId/reviews', [
+    check('text').exists(),
+    check('rating').isInt({ min: 1, max: 10 })
+  ],
+  jwtMiddleware, authMiddleware, async function (req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
-app.post('/api/v1/books/:bookId/reviews', jwtMiddleware, authMiddleware, function (req, res) {
-    res.send('add book rewiew!')
+    let text = req.body.text;
+    let rating = req.body.rating;
+    let bookId = req.params.bookId || "";
+
+    let newReview = await queries.addBookReview(bookId, req.user.name, text, rating);
+
+    res.json(newReview.value)
 })
 
 app.post('/api/v1/auth/register', [

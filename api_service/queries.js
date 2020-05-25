@@ -79,6 +79,33 @@ async function getBookById(uuid){
     return book;
 }
 
+async function addBookReview(uuid, username, text, rating){
+    let db = await MongoClient.connect(MongoURI);
+    let booksDb = db.db("books");
+
+    let author = await booksDb.collection('users').findOne({name: username})
+    if (author){
+        return booksDb.collection('books')
+        .findOneAndUpdate(
+            {_id: uuid},
+            {$push: {
+                reviews: {
+                    text: text, 
+                    rating: rating,
+                    date: new Date(),
+                    author: author.name
+                }
+            },
+            $set: {
+                avg_rating: rating
+            }},  // TODO: set normal avg rating
+            {
+                returnOriginal: false,
+                upsert: true
+            })
+    }
+}
+
 async function getAuthorsSuggestions(namePart, limit=20) {
     let regexp = makeSafeRegexp(namePart);
 
@@ -107,5 +134,6 @@ module.exports = {
     getBookById,
     searchBooks,
     addUser,
-    isUserPasswordCorrect
+    isUserPasswordCorrect,
+    addBookReview
 }
