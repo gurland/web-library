@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { fromSource, findMeta, createLinks, joinComponents, getKeyByValue, clarify } from '../helpers';
 import notFoundImage from '../assets/images/404.jpg';
 
@@ -19,7 +20,7 @@ export default function BookCard({ book, lang, srcLang, genresMeta }) {
         />
       </div>
       <Card.Body>
-        <Card.Title><a href={`/books/${book._id}`}>{ book.title }</a></Card.Title>
+        <Card.Title><Link to={`/books/${book._id}`}>{ book.title }</Link></Card.Title>
         <Card.Subtitle
           className="mb-2 text-muted"
         >
@@ -47,12 +48,12 @@ export default function BookCard({ book, lang, srcLang, genresMeta }) {
             className="mb-2 text-muted additional-info-element"
           >
             Мова: {
-              <a
-                href={`/results?language=${book.lang}`}
+              <Link
+                to={`/results?language=${book.lang}`}
                 key={book.lang}
               >
                 {lang}
-              </a>
+              </Link>
             }
           </Card.Subtitle>
           {

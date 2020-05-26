@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Container, Card, Button } from 'react-bootstrap';
 import ReactStars from 'react-stars';
 
@@ -83,12 +83,12 @@ export default function BookPage() {
             className="mb-2 text-muted additional-info-element"
           >
             Мова: {
-            <a
-              href={`/results?language=${book.lang}`}
+            <Link
+              to={`/results?language=${book.lang}`}
               key={book.lang}
             >
               {lang}
-            </a>
+            </Link>
           }
           </Card.Subtitle>
           {
