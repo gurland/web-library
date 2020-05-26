@@ -12,8 +12,8 @@ let HEAPCOUNT = 0;
 
 export class Observer
 {
-    private static timeout = Number(config.observerOptions.timeout);
-    private static chunk_size = Number(config.observerOptions.chunk_size);
+    public static timeout = Number(config.observerOptions.timeout);
+    public static chunk_size = Number(config.observerOptions.chunk_size);
 
     constructor() {
         mongoose.connect(config.mongoCredentials.uri, {
@@ -87,14 +87,14 @@ export class Observer
                     // logger.debug("Ended chunk");
                 });
 
-                // logger.debug("Started inserting...");
-                // await Books.collection.insertMany(books)
-                //     .then(
-                //         b => {
-                //             logger.info("Insertion complete!");
-                //             // logger.debug(`Inserted id: ${b.insertedIds[0]}`);
-                //         }
-                //     );
+                logger.debug("Started inserting...");
+                await Books.collection.insertMany(books)
+                    .then(
+                        b => {
+                            logger.info("Insertion complete!");
+                            // logger.debug(`Inserted id: ${b.insertedIds[0]}`);
+                        }
+                    );
 
                 books = [];
             }
@@ -105,6 +105,5 @@ export class Observer
         } catch (err) {
             logger.error(err);
         }
-        return require("bluebird").Promise.delay(Observer.timeout).then(() => this.Observe(dirName));
     }
 }
