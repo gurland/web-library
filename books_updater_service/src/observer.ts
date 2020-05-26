@@ -47,13 +47,14 @@ export class Observer
             let books: Book[] = [];
             for (let i = 0, j = fbooks.length; i < j; i += Observer.chunk_size) {
 
-                if(HEAPCOUNT>100){
+                if(HEAPCOUNT>3000){
                     logger.info('CREATED HEAPDUMP');
                     logger.info('CREATED HEAPDUMP');
                     logger.info('CREATED HEAPDUMP');
                     logger.info('CREATED HEAPDUMP');
                     logger.info('CREATED HEAPDUMP');
-                    heapdump.writeSnapshot('/var/local/heap' + Date.now() + '.heapsnapshot')
+                    heapdump.writeSnapshot('/var/local/heap/' + Date.now() + '.heapsnapshot')
+                    HEAPCOUNT = 0;
                 }
                 // logger.debug("Started new chunk..");
                 let chunk = fbooks.slice(i, i + Observer.chunk_size);
