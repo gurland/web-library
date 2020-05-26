@@ -16,7 +16,7 @@ export default function BookCard({ book, lang, srcLang, genresMeta }) {
         <Card.Img
           variant="left"
           src={fromSource(book.cover) || notFoundImage}
-          className={book.book_cover ? 'native-cover' : null}
+          className={book.cover ? 'native-cover' : null}
         />
       </div>
       <Card.Body>
