@@ -23,6 +23,7 @@ export default function BookPage() {
   const [book, setBook] = useState(null);
 
   const [loading, setLoading] = useState(true);
+  const [postingError, setPostingError] = useState(false);
   const [langsMeta, setLangsMeta] = useState([]);
   const [genresMeta, setGenresMeta] = useState({});
 
@@ -51,8 +52,11 @@ export default function BookPage() {
 
     setLoading(true);
     postReview(book._id, text, rating * 2)
+      .then(({ status }) => {
+        if(status === 400) setPostingError(true)
+      })
       .then(() => fetchData())
-      .then(() => setLoading(false));
+      .then(() => setLoading(false))
   }
 
   const bookInfo = !book ? <NotFoundSign /> : (
@@ -134,7 +138,7 @@ export default function BookPage() {
           </a>
         </Card.Body>
       </Card>
-      <CommentSection reviews={book.reviews || []} submitReview={submitReview} />
+      <CommentSection reviews={book.reviews || []} submitReview={submitReview} error={postingError}/>
     </div>
   );
 

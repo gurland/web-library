@@ -6,7 +6,7 @@ import { Card } from 'react-bootstrap';
 
 import ReviewInput from './ReviewInput';
 
-export default function CommentSection({ reviews, submitReview }) {
+export default function CommentSection({ reviews, submitReview, error }) {
   const reviewComponents = reviews.map((review, idx) => <Review review={review} key={idx}/>);
 
   return (
@@ -16,7 +16,7 @@ export default function CommentSection({ reviews, submitReview }) {
           reviewComponents
         }
       </Card>
-      <ReviewInput onSubmit={submitReview}/>
+      <ReviewInput error={error} onSubmit={submitReview}/>
     </>
   );
 }
