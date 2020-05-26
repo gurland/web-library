@@ -37,9 +37,14 @@ export default function LoginPage() {
     }),
     onSubmit: async (values) => {
       const { username, password } = values;
-      await authorize(username, password);
-      setAuthorized(true);
+      const status = await authorize('login', username, password);
 
+      if (status === 400) {
+        errors.serverError = 'Неправильне ім\'я користувача або пароль.';
+        return;
+      }
+
+      setAuthorized(true);
       ctx.setAuthorized(true);
     },
   });
