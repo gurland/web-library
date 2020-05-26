@@ -25,8 +25,6 @@ export default function SearchResults(props) {
       setBooks(books)
       setLoading(false);
     }))
-
-    console.log('test');
   }, [location.search]);
 
   const bookCards = books.map(book => {
