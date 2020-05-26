@@ -7,7 +7,7 @@ import { Card } from 'react-bootstrap';
 import ReviewInput from './ReviewInput';
 
 export default function CommentSection({ reviews, submitReview }) {
-  const reviewComponents = reviews.map(review => <Review review={review} key={review.id}/>);
+  const reviewComponents = reviews.map((review, idx) => <Review review={review} key={idx}/>);
 
   return (
     <>
