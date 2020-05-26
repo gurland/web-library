@@ -3,7 +3,7 @@ import Books, { Book } from "./book.model";
 import { config } from "./config";
 import { logger } from "./logger";
 import mongoose from 'mongoose';
-import writeSnapshot from 'heapdump';
+import heapdump from 'heapdump';
 
 import * as fs from "fs";
 import JSZip   from "jszip";
@@ -53,7 +53,7 @@ export class Observer
                     logger.info('CREATED HEAPDUMP');
                     logger.info('CREATED HEAPDUMP');
                     logger.info('CREATED HEAPDUMP');
-                    writeSnapshot('/var/local/heap' + Date.now() + '.heapsnapshot')
+                    heapdump.writeSnapshot('/var/local/heap' + Date.now() + '.heapsnapshot')
                 }
                 // logger.debug("Started new chunk..");
                 let chunk = fbooks.slice(i, i + Observer.chunk_size);
