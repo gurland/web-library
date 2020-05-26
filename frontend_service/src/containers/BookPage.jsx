@@ -129,6 +129,9 @@ export default function BookPage() {
           <a href={`/reader?bookId=${book._id}`}>
             <Button variant="primary" style={{width: '100%'}}>Читати онлайн</Button>
           </a>
+          <a href={`/reader/files/${book._id}.zip`}>
+            <Button variant="outline-primary" style={{width: '100%'}}>Завантажити</Button>
+          </a>
         </Card.Body>
       </Card>
       <CommentSection reviews={book.reviews || []} submitReview={submitReview} />
