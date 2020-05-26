@@ -12,7 +12,7 @@ export default function CommentSection({ bookId }) {
 
   useEffect(() => {
     getReviews(bookId)
-      .then(reviews => setReviews(reviews))
+      .then(reviews => setReviews(reviews || []))
       .then(() => setLoading(false));
   }, [])
 

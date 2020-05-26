@@ -20,8 +20,8 @@ export function formatGenres(genres) {
 }
 
 export function formatLangs(langs) {
-  return langs.map(lang => {
-    const [[ key, value ]] = Object.entries(lang);
+  return Object.entries(langs).map(lang => {
+    const [ key, value ] = lang;
 
     return {
       text: value,

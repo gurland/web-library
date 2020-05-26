@@ -44,7 +44,7 @@ export default function BookPage() {
   }, []);
 
   const genres = book && clarify(book.genres.map(genre => genresMeta[genre]));
-  const lang = book && findMeta(langsMeta, book.lang);
+  const lang = book && langsMeta[book.lang];
 
   const bookInfo = !book ? <NotFoundSign /> : (
     <div className="content-wrapper">
@@ -96,7 +96,7 @@ export default function BookPage() {
               <Card.Subtitle
                 className="mb-2 text-muted additional-info-element"
               >
-                Мова оригіналу: { findMeta(langsMeta, book.src_lang) }
+                Мова оригіналу: { langsMeta[book.src_lang] }
               </Card.Subtitle>
             )
           }

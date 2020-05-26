@@ -4,8 +4,8 @@ import { Card } from 'react-bootstrap';
 import { fromSource, findMeta, createLinks, joinComponents, getKeyByValue, clarify } from '../helpers';
 import notFoundImage from '../assets/images/404.jpg';
 
-export default function BookCard({ book, langsMeta, genresMeta }) {
-  const lang = findMeta(langsMeta, book.lang);
+export default function BookCard({ book, lang, srcLang, genresMeta }) {
+  // const lang = findMeta(langsMeta, book.lang);
   const genres = clarify(book.genres.map(genre => genresMeta[genre]));
 
 
@@ -60,7 +60,7 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
               <Card.Subtitle
                 className="mb-2 text-muted additional-info-element"
               >
-                Мова оригіналу: { findMeta(langsMeta, book.src_lang) }
+                Мова оригіналу: { srcLang }
               </Card.Subtitle>
             )
           }

@@ -28,7 +28,8 @@ export default function SearchResults() {
     return (
       <BookCard
         book={book}
-        langsMeta={langsMeta}
+        lang={langsMeta[book.lang]}
+        srcLang={langsMeta[book.src_lang]}
         genresMeta={genresMeta}
         key={book._id}
       />
