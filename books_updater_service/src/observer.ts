@@ -56,22 +56,15 @@ export class Observer
                         logger.info(`Added ${book.title}`);
                         logger.debug(`Pushed id: ${book._id}`);
 
-                        if (f.includes(".zip")) {
-                            fs.copyFileSync(`${dirName}/${f}`, `res/${book._id}.zip`);
-                            logger.info(`${book._id}.zip has been written`);
-                        }
-                        else if (f.includes(".fb2")) {
-                            // let zip = new JSZip().file(`${f}`, fs.readFileSync(`${dirName}/${f}`));
-                            let zip = new JSZip().file(`${f}`, Buffer.from(parser.reencodeBook(`${dirName}/${f}`)));
+                        let zip = new JSZip().file(`${f.slice(0, -4)}.fb2`, Buffer.from(parser.reencodeBook(`${dirName}/${f}`)));
 
                             zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
                             .pipe(fs.createWriteStream(`res/${book._id}.zip`))
                             .on('finish', () => {
                                 logger.debug(`Archine written.`);
                             });
-                            
-                            logger.info(`${book._id}.zip was archived and written`);
-                        }
+
+                            logger.info(`${book._id}.zip has been written`);
                     }
 
                     fs.unlinkSync(`${dirName}/${f}`);
