@@ -88,13 +88,13 @@ export class Observer
                 });
 
                 // logger.debug("Started inserting...");
-                await Books.collection.insertMany(books)
-                    .then(
-                        b => {
-                            logger.info("Insertion complete!");
-                            // logger.debug(`Inserted id: ${b.insertedIds[0]}`);
-                        }
-                    );
+                // await Books.collection.insertMany(books)
+                //     .then(
+                //         b => {
+                //             logger.info("Insertion complete!");
+                //             // logger.debug(`Inserted id: ${b.insertedIds[0]}`);
+                //         }
+                //     );
 
                 books = [];
             }
