@@ -40,7 +40,7 @@ export class Observer
                 if ((f.indexOf(".fb2") >= 0 || f.indexOf(".zip") >=0) && 
                      !f.includes(".git")    && fs.statSync(`${dirName}/${f}`)["size"] / 1000000.0 <= 4.0) {
                         fbooks.push(f);
-                        // logger.debug(`Pushed ${f}`);
+                        logger.debug(`Pushed ${f}`);
                     }
             });
 
@@ -56,35 +56,35 @@ export class Observer
                     heapdump.writeSnapshot('/var/local/heap/' + Date.now() + '.heapsnapshot')
                     HEAPCOUNT = 0;
                 }
-                // logger.debug("Started new chunk..");
+                logger.debug("Started new chunk..");
                 let chunk = fbooks.slice(i, i + Observer.chunk_size);
 
                 chunk.forEach((f: string) => {
                     HEAPCOUNT += 1;
                     let parser = new FB2Parser(`${dirName}/${f}`);
                     
-                    // logger.debug(`Start parsing ${f}`);
+                    logger.debug(`Start parsing ${f}`);
                     let book = parser.parse();
                     logger.info(`Parsed ${book?.title}`);
 
                     if (book) {
                         books.push(book);
                         logger.info(`Added ${book.title}`);
-                        // logger.debug(`Pushed id: ${book._id}`);
+                        logger.debug(`Pushed id: ${book._id}`);
 
                         let zip = new JSZip().file(`${f.slice(0, -4)}.fb2`, Buffer.from(parser.reencodeBook(`${dirName}/${f}`)));
 
                             zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
                             .pipe(fs.createWriteStream(`res/${book._id}.zip`))
                             .on('finish', () => {
-                                // logger.debug(`Archine written.`);
+                                logger.debug(`Archine written.`);
                             });
 
                             logger.info(`${book._id}.zip has been written`);
                     }
 
                     fs.unlinkSync(`${dirName}/${f}`);
-                    // logger.debug("Ended chunk");
+                    logger.debug("Ended chunk");
                 });
 
                 logger.debug("Started inserting...");
