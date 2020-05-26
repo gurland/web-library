@@ -50,7 +50,7 @@ export default function BookPage() {
     if(!(text.trim()) || !rating) return;
 
     setLoading(true);
-    postReview(book._id, text, rating)
+    postReview(book._id, text, rating * 2)
       .then(() => fetchData())
       .then(() => setLoading(false));
   }
@@ -123,7 +123,7 @@ export default function BookPage() {
             Переглянуто: {book.view_count}
           </Card.Subtitle>
           <div className="book-rating">
-            <ReactStars size={36} half={true} edit={false} value={book.avg_rating}/>
+            <ReactStars size={36} half={true} edit={false} value={book.avg_rating / 2}/>
           </div>
           <hr/>
           <a href={`/reader?bookId=${book._id}`}>
