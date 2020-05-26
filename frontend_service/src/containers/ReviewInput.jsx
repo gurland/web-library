@@ -5,7 +5,7 @@ import ReactStars from 'react-stars';
 
 import { Context } from '../App';
 
-export default function ReviewInput({ onSubmit }) {
+export default function ReviewInput({ onSubmit, error }) {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const ctx = useContext(Context);
@@ -35,6 +35,7 @@ export default function ReviewInput({ onSubmit }) {
         />
       </InputGroup>
       <div className="controls-wrapper">
+        {error && <Form.Text className="text-muted error review-error">На кожну книгу можна написати лише один відгук.</Form.Text>}
         <ReactStars half={true} size={36} value={rating} onChange={(newRating) => setRating(newRating)} />
         {button}
       </div>
