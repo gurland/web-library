@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { fromSource, findMeta, createLinks, joinComponents, getKeyByValue, clarify } from '../helpers';
 import notFoundImage from '../assets/images/404.jpg';
 
-export default function BookCard({ book, langsMeta, genresMeta }) {
-  const lang = findMeta(langsMeta, book.lang);
+export default function BookCard({ book, lang, srcLang, genresMeta }) {
+  // const lang = findMeta(langsMeta, book.lang);
   const genres = clarify(book.genres.map(genre => genresMeta[genre]));
 
 
@@ -14,12 +15,12 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
       <div className="img-wrapper">
         <Card.Img
           variant="left"
-          src={fromSource(book.book_cover) || notFoundImage}
-          className={book.book_cover ? 'native-cover' : null}
+          src={fromSource(book.cover) || notFoundImage}
+          className={book.cover ? 'native-cover' : null}
         />
       </div>
       <Card.Body>
-        <Card.Title><a href={`/books/${book._id}`}>{ book.title }</a></Card.Title>
+        <Card.Title><Link to={`/books/${book._id}`}>{ book.title }</Link></Card.Title>
         <Card.Subtitle
           className="mb-2 text-muted"
         >
@@ -47,12 +48,12 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
             className="mb-2 text-muted additional-info-element"
           >
             Мова: {
-              <a
-                href={`/results?language=${book.lang}`}
+              <Link
+                to={`/results?language=${book.lang}`}
                 key={book.lang}
               >
                 {lang}
-              </a>
+              </Link>
             }
           </Card.Subtitle>
           {
@@ -60,7 +61,7 @@ export default function BookCard({ book, langsMeta, genresMeta }) {
               <Card.Subtitle
                 className="mb-2 text-muted additional-info-element"
               >
-                Мова оригіналу: { findMeta(langsMeta, book.src_lang) }
+                Мова оригіналу: { srcLang }
               </Card.Subtitle>
             )
           }

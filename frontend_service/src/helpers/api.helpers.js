@@ -60,15 +60,16 @@ export async function postReview(bookId, text, rating) {
   }, { Authorization: `Bearer ${accessToken}` });
 }
 
-export async function authorize(username, password) {
+export async function authorize(type, username, password) {
   const response = await post(
-    'auth/login',
+    `auth/${type}`,
     { name: username, password }
   );
 
-  const { access_token } = response;
+  const { status, content: { access_token } } = response;
+  access_token && addToStorage('accessToken', access_token);
 
-  addToStorage('accessToken', access_token);
+  return status;
 }
 
 async function get(path, queryParams = {}) {
@@ -95,5 +96,11 @@ async function post(path, body, headers = {}) {
     body: JSON.stringify(body),
   });
 
-  return await response.json();
+  const status = response.status;
+  const content = await response.json();
+
+  return {
+    status,
+    content,
+  };
 }

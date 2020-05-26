@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export function normalize(obj) {
   const result = {};
@@ -23,28 +24,29 @@ export function findMeta(metadata = [], key) {
 export function createLinks(source, queryParam, customUrlCallback = (el) => el) {
   if(typeof source === 'string') {
     return (
-      <a
-        href={`/results?${queryParam}=${customUrlCallback(source)}`}
+      <Link
+        to={`/results?${queryParam}=${customUrlCallback(source)}`}
         key={source}
       >
         {source}
-      </a>
+      </Link>
     );
 
   }
   return source.map(element => {
     return (
-      <a
-        href={`/results?${queryParam}=${customUrlCallback(element)}`}
+      <Link
+        to={`/results?${queryParam}=${customUrlCallback(element)}`}
         key={element}
       >
         {element}
-      </a>
+      </Link>
     );
   })
 }
 
 export function joinComponents(components, separator = ', ') {
+  if(!components.length) return;
   return components.reduce((prev, curr) => [prev, separator, curr])
 }
 

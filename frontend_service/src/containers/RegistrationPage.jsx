@@ -45,9 +45,14 @@ export default function RegPage() {
     }),
     onSubmit: async (values) => {
       const { username, password } = values;
-      await authorize(username, password);
-      setAuthorized(true);
+      const status = await authorize('register', username, password);
 
+      if (status === 409) {
+        errors.serverError = 'Ім\'я користувача вже використовується.';
+        return;
+      }
+
+      setAuthorized(true);
       ctx.setAuthorized(true);
     },
   });

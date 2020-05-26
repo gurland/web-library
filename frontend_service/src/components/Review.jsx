@@ -17,7 +17,7 @@ export default function Review({ review }) {
 
       <Card.Subtitle>
         <ReactStars
-          value={review.rating}
+          value={review.rating / 2}
           half={true}
           edit={false}
         />
