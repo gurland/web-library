@@ -13,8 +13,8 @@ import {
   fromSource,
   getBook,
   getKeyByValue,
-  getMetadata,
-  joinComponents,
+  getMetadata, getReviews,
+  joinComponents, postReview,
 } from '../helpers';
 
 import notFoundImage from '../assets/images/404.jpg';
@@ -28,16 +28,16 @@ export default function BookPage() {
 
   const { id } = useParams();
 
+  async function fetchData() {
+    const { langsMeta, genresMeta } = await getMetadata();
+    const book = await getBook(id);
+
+    setLangsMeta(langsMeta);
+    setGenresMeta(genresMeta);
+    setBook(book);
+  }
+
   useEffect(() => {
-    async function fetchData() {
-      const { langsMeta, genresMeta } = await getMetadata();
-      const book = await getBook(id);
-
-      setLangsMeta(langsMeta);
-      setGenresMeta(genresMeta);
-      setBook(book);
-    }
-
     fetchData().then(() => {
       setLoading(false)
     });
@@ -45,6 +45,15 @@ export default function BookPage() {
 
   const genres = book && clarify(book.genres.map(genre => genresMeta[genre]));
   const lang = book && langsMeta[book.lang];
+
+  function submitReview(text, rating) {
+    if(!(text.trim()) || !rating) return;
+
+    setLoading(true);
+    postReview(book._id, text, rating)
+      .then(() => fetchData())
+      .then(() => setLoading(false));
+  }
 
   const bookInfo = !book ? <NotFoundSign /> : (
     <div className="content-wrapper">
@@ -122,7 +131,7 @@ export default function BookPage() {
           </a>
         </Card.Body>
       </Card>
-      <CommentSection bookId={id} />
+      <CommentSection reviews={book.reviews} submitReview={submitReview} />
     </div>
   );
 

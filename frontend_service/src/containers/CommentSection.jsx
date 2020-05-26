@@ -6,32 +6,14 @@ import { Card } from 'react-bootstrap';
 
 import ReviewInput from './ReviewInput';
 
-export default function CommentSection({ bookId }) {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getReviews(bookId)
-      .then(reviews => setReviews(reviews || []))
-      .then(() => setLoading(false));
-  }, [])
-
-  function submitReview(text, rating) {
-    if(!(text.trim()) || !rating) return;
-
-    setLoading(true);
-    postReview(bookId, text, rating)
-      .then(() => getReviews(bookId).then(reviews => setReviews(reviews)))
-      .then(() => setLoading(false));
-  }
-
+export default function CommentSection({ reviews, submitReview }) {
   const reviewComponents = reviews.map(review => <Review review={review} key={review.id}/>);
 
   return (
     <>
       <Card body className="comment-section">
         {
-          loading ? <Spinner /> : reviewComponents
+          reviewComponents
         }
       </Card>
       <ReviewInput onSubmit={submitReview}/>
