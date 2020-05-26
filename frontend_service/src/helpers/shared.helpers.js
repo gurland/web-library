@@ -46,6 +46,7 @@ export function createLinks(source, queryParam, customUrlCallback = (el) => el) 
 }
 
 export function joinComponents(components, separator = ', ') {
+  if(!components.length) return;
   return components.reduce((prev, curr) => [prev, separator, curr])
 }
 
