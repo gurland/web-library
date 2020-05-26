@@ -3,7 +3,7 @@ import Books, { Book } from "./book.model";
 import { config } from "./config";
 import { logger } from "./logger";
 import mongoose from 'mongoose';
-import * as writeSnapshot from 'heapdump';
+import writeSnapshot from 'heapdump';
 
 import * as fs from "fs";
 import JSZip   from "jszip";
