@@ -15,7 +15,7 @@ export default function BookCard({ book, lang, srcLang, genresMeta }) {
       <div className="img-wrapper">
         <Card.Img
           variant="left"
-          src={fromSource(book.book_cover) || notFoundImage}
+          src={fromSource(book.cover) || notFoundImage}
           className={book.book_cover ? 'native-cover' : null}
         />
       </div>

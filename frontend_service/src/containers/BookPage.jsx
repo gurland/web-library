@@ -60,7 +60,7 @@ export default function BookPage() {
       <Card className="book-info">
         <Card.Img
           variant="top"
-          src={fromSource(book.book_cover) || notFoundImage}
+          src={fromSource(book.cover) || notFoundImage}
         />
         <Card.Body>
           <Card.Title style={{fontSize: '1.5rem'}}>
@@ -131,7 +131,7 @@ export default function BookPage() {
           </a>
         </Card.Body>
       </Card>
-      <CommentSection reviews={book.reviews} submitReview={submitReview} />
+      <CommentSection reviews={book.reviews || []} submitReview={submitReview} />
     </div>
   );
 
