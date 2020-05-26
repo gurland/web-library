@@ -73,10 +73,13 @@ async function getBookById(uuid){
     let db = await MongoClient.connect(MONGO_URI);
     let booksDb = db.db("books");
 
-    let book = booksDb.collection('books').findOne({_id: uuid})
+    let book = await booksDb.collection('books').findOneAndUpdate(
+        {_id: uuid},
+        {$inc: {view_count: 1}}
+    )
     
     db.close();
-    return book;
+    return book.value;
 }
 
 async function addBookReview(uuid, username, text, rating){
