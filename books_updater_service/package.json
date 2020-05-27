@@ -6,7 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "start": "npm run tsc && node dist/app.js",
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon src/app.ts",
+    "debug": "node --nolazy --inspect-brk=9229 dist/app.js"
   },
   "author": "",
   "license": "ISC",
