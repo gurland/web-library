@@ -6,11 +6,11 @@ const dir = "upload";
 let obs = new Observer();
 let currentStep = obs.Observe(dir);
 
-let interval = setInterval(checkCallback, Observer.timeout);
+let timeout = setTimeout(checkCallback, Observer.timeout);
 
 async function checkCallback () {
-    clearInterval(interval);
+    clearTimeout(timeout);
     await currentStep;    
     currentStep = obs.Observe(dir);
-    interval = setInterval(checkCallback, Observer.timeout);
+    timeout = setTimeout(checkCallback, Observer.timeout);
 }
