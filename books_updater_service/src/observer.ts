@@ -59,7 +59,7 @@ export class Observer
                         let zip = new JSZip().file(`${f.slice(0, -4)}.fb2`, Buffer.from(parser.reencodeBook(`${dirName}/${f}`)));
 
                             zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
-                            .pipe(fs.createWriteStream(`res/${book._id}.zip`))
+                            .pipe(fs.createWriteStream(`${config.observerOptions.output_dir}/${book._id}.zip`))
                             .on('finish', () => {
                                 logger.debug(`Archine written.`);
                             });
