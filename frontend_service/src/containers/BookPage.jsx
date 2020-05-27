@@ -130,7 +130,7 @@ export default function BookPage() {
             <ReactStars size={36} half={true} edit={false} value={book.avg_rating / 2}/>
           </div>
           <hr/>
-          <a href={`/reader?bookId=${book._id}`}>
+          <a href={`/reader?bookId=${book._id}`} target="_blank">
             <Button variant="primary" style={{width: '100%'}}>Читати онлайн</Button>
           </a>
           <a href={`/reader/files/${book._id}.zip`}>
