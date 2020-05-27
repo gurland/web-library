@@ -183,7 +183,9 @@ export class FB2Parser {
         }
         
         let temp: string = file.toString("utf8");
-        let encoding: string = temp.slice(0, temp.indexOf("\n")).match(/encoding="(.*)"/)![1];
+        let encoding: string = temp.slice(0, 
+            temp.indexOf("\n")
+        ).match(/encoding=[\"\']([^\"]*)[\"\']/)![1];
 
         let reencoded: string = this.decode(file, encoding, "utf8");
         reencoded = reencoded.replace(encoding, "UTF-8");
