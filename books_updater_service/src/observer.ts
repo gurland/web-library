@@ -3,12 +3,9 @@ import Books, { Book } from "./book.model";
 import { config } from "./config";
 import { logger } from "./logger";
 import mongoose from 'mongoose';
-import heapdump from 'heapdump';
 
 import * as fs from "fs";
 import JSZip   from "jszip";
-
-let HEAPCOUNT = 0;
 
 export class Observer
 {
@@ -29,8 +26,6 @@ export class Observer
     public async Observe(dirName: string): Promise<any>
     {
         try {
-            let counter = 0;
-
             let files = fs.readdirSync(dirName);
             
             let fbooks: string[] = [];
@@ -46,21 +41,10 @@ export class Observer
 
             let books: Book[] = [];
             for (let i = 0, j = fbooks.length; i < j; i += Observer.chunk_size) {
-
-                if(HEAPCOUNT>3000){
-                    logger.info('CREATED HEAPDUMP');
-                    logger.info('CREATED HEAPDUMP');
-                    logger.info('CREATED HEAPDUMP');
-                    logger.info('CREATED HEAPDUMP');
-                    logger.info('CREATED HEAPDUMP');
-                    heapdump.writeSnapshot('/var/local/heap/' + Date.now() + '.heapsnapshot')
-                    HEAPCOUNT = 0;
-                }
                 logger.debug("Started new chunk..");
                 let chunk = fbooks.slice(i, i + Observer.chunk_size);
 
                 chunk.forEach((f: string) => {
-                    HEAPCOUNT += 1;
                     let parser = new FB2Parser(`${dirName}/${f}`);
                     
                     logger.debug(`Start parsing ${f}`);
