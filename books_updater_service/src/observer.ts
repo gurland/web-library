@@ -15,6 +15,7 @@ export class Observer {
     public static chunk_size = Number(config.observerOptions.chunk_size);
 
     constructor() {
+        logger.info(`MONGO URI: ${config.mongoCredentials.uri}`)
         mongoose.connect(config.mongoCredentials.uri, {
             useNewUrlParser: true,
             useFindAndModify: true,
