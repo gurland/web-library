@@ -31,7 +31,7 @@ export default function FiltersAccordion(props) {
       selectedLang, setSelectedLang
     },
     ratings: {
-      ratings, setRatings
+      ratings, setRatings, includeRating, setIncludeRating
     }
   } = props;
 
@@ -96,10 +96,19 @@ export default function FiltersAccordion(props) {
           </Card>
           <Card className="column-2">
             <Card.Body>
-              <Card.Title>Пошук за рейтингом</Card.Title>
+              <Card.Title>
+                Пошук за рейтингом
+                <input type="checkbox"
+                       checked={includeRating}
+                       onChange={() => {
+                         setIncludeRating(!includeRating);
+                       }}
+                       style={{marginLeft: '0.5rem'}}
+                />
+              </Card.Title>
               <Form.Group>
-                <Form.Control value={ratings[0]}/>
-                <Form.Control value={ratings[1]}/>
+                <Form.Control value={ratings[0]} disabled={!includeRating}/>
+                <Form.Control value={ratings[1]} disabled={!includeRating}/>
                 <Range
                   min={1.0}
                   max={10.0}
@@ -107,6 +116,7 @@ export default function FiltersAccordion(props) {
                   step={0.1}
                   pushable={0.1}
                   onChange={handleRatingChange}
+                  disabled={!includeRating}
                 />
               </Form.Group>
             </Card.Body>

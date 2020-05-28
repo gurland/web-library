@@ -14,6 +14,8 @@ export default function SearchForm() {
   const [selectedAuthors, setSelectedAuthors] = useState([]);
   const [selectedLang, setSelectedLang] = useState('');
 
+  const [includeRating, setIncludeRating] = useState(false);
+
   const [submitted, setSubmitted] = useState(false);
 
   return submitted
@@ -27,8 +29,8 @@ export default function SearchForm() {
               authors: selectedAuthors.length ? selectedAuthors : null,
               genres: selectedGenres.join(','),
               language: selectedLang,
-              minRating: ratings[0],
-              maxRating: ratings[1],
+              minRating: includeRating && ratings[0],
+              maxRating: includeRating && ratings[1],
             })
           }),
         }}
@@ -50,7 +52,7 @@ export default function SearchForm() {
       <FiltersAccordion
         selectedAuthors={{ selectedAuthors, setSelectedAuthors }}
         selectedLang={{ selectedLang, setSelectedLang }}
-        ratings={{ ratings, setRatings }}
+        ratings={{ ratings, setRatings, includeRating, setIncludeRating }}
         selectedGenres={{ selectedGenres, setSelectedGenres }}
       />
     </Form>
