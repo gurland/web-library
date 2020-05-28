@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const fs = require('fs');
 
-const detectCharEncoding = require('detect-character-encoding');
 const Iconv  = require('iconv').Iconv;
 
 export class FB2Parser {
@@ -183,9 +182,14 @@ export class FB2Parser {
             file = fs.readFileSync(this.filepath);
         }
         
-        const charsetMatch = detectCharEncoding(file);
-        let reencoded: string = this.decode(file, charsetMatch.encoding, "utf8");
-        reencoded = reencoded.replace(charsetMatch.encoding.toLowerCase(), "UTF-8");
+        let temp: string = file.toString("utf8");
+        let encoding: string = temp.slice(0, 
+            temp.indexOf("\n")
+        ).match(/encoding=[\"\']([^\"]*)[\"\']/)![1];
+
+        let reencoded: string = this.decode(file, encoding, "utf8");
+        reencoded = reencoded.replace(encoding, "UTF-8");
+
         return reencoded;
     }
 }

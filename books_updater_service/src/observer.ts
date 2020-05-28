@@ -9,8 +9,8 @@ import JSZip   from "jszip";
 
 export class Observer
 {
-    private static timeout = 1000;
-    private static chunk_size = 100;
+    public static timeout = Number(config.observerOptions.timeout);
+    public static chunk_size = Number(config.observerOptions.chunk_size);
 
     constructor() {
         mongoose.connect(config.mongoCredentials.uri, {
@@ -59,7 +59,7 @@ export class Observer
                         let zip = new JSZip().file(`${f.slice(0, -4)}.fb2`, Buffer.from(parser.reencodeBook(`${dirName}/${f}`)));
 
                             zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
-                            .pipe(fs.createWriteStream(`res/${book._id}.zip`))
+                            .pipe(fs.createWriteStream(`${config.observerOptions.output_dir}/${book._id}.zip`))
                             .on('finish', () => {
                                 logger.debug(`Archine written.`);
                             });
@@ -76,7 +76,7 @@ export class Observer
                     .then(
                         b => {
                             logger.info("Insertion complete!");
-                            logger.debug(`Inserted id: ${b.insertedIds[0]}`);
+                            // logger.debug(`Inserted id: ${b.insertedIds[0]}`);
                         }
                     );
 
@@ -89,6 +89,5 @@ export class Observer
         } catch (err) {
             logger.error(err);
         }
-        return require("bluebird").Promise.delay(Observer.timeout).then(() => this.Observe(dirName));
     }
 }

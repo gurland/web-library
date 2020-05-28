@@ -22,7 +22,7 @@ export default function Navbar() {
       <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
       <BootstrapNavbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="/reader">Читалка</Nav.Link>
+          <Nav.Link href="/reader" target="_blank">Читалка</Nav.Link>
           {
             ctx.authorized
               ? <Nav.Link as={Link} to="/" onClick={logout}>Вийти</Nav.Link>
