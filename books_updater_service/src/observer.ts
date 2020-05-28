@@ -1,14 +1,16 @@
-import { FB2Parser } from "./parser";
+import * as fs from "fs";
+import path from "path";
+
 import Books, { Book } from "./book.model";
 import { config } from "./config";
+import { FB2Parser } from "./parser";
 import { logger } from "./logger";
+import { BookReader } from "./bookReader";
+
 import mongoose from 'mongoose';
+import AdmZip from "adm-zip";
 
-import * as fs from "fs";
-import JSZip   from "jszip";
-
-export class Observer
-{
+export class Observer {
     public static timeout = Number(config.observerOptions.timeout);
     public static chunk_size = Number(config.observerOptions.chunk_size);
 
@@ -23,64 +25,82 @@ export class Observer
         });
     }
 
-    public async Observe(dirName: string): Promise<any>
-    {
+    private getFileSize(path: string) {
         try {
-            let files = fs.readdirSync(dirName);
-            
-            let fbooks: string[] = [];
-            files.forEach((f: string) => {
-                // take every *.fb2 or *.zip, exclude .git*, everything else delete
-                // file with size smaller than 4mb
-                if ((f.indexOf(".fb2") >= 0 || f.indexOf(".zip") >=0) && 
-                     !f.includes(".git")    && fs.statSync(`${dirName}/${f}`)["size"] / 1000000.0 <= 4.0) {
-                        fbooks.push(f);
-                        logger.debug(`Pushed ${f}`);
-                    }
-            });
+            return fs.statSync(path).size
+        } catch (e) {
+            return 0
+        }
+    }
+
+    private isSupportedFileExtension(fileName: string) {
+        return !fileName.includes(".git") && fileName.endsWith('.fb2') || fileName.endsWith('.zip')
+    }
+
+    private hasSupportedFilelSize(filePath: string) {
+        return Boolean(this.getFileSize(path.resolve(filePath)) / 1000000.0 <= 12.0)
+    }
+
+    private getBookFileNames(dirName: string) {
+        try {
+            const files = fs.readdirSync(path.resolve(dirName));
+            const filtered = files.filter((path: string) => this.isSupportedFileExtension(path) && this.hasSupportedFilelSize(`${dirName}/${path}`));
+            return filtered;
+        } catch (e) {
+            return [];
+        }
+    }
+
+    private async insertBooks(books: Book[]) {
+        try {
+            await Books.collection.insertMany(books);
+            logger.info(`Insertion complete! ${books.length} books`);
+        } catch (e) {
+            logger.info(`Insertion failed!`);
+        }
+    }
+
+    public async Observe(dirName: string): Promise<any> {
+        try {
+            const fbooks: string[] = this.getBookFileNames(dirName);
 
             let books: Book[] = [];
-            for (let i = 0, j = fbooks.length; i < j; i += Observer.chunk_size) {
-                logger.debug("Started new chunk..");
-                let chunk = fbooks.slice(i, i + Observer.chunk_size);
+            let counter = 0;
 
-                chunk.forEach((f: string) => {
-                    let parser = new FB2Parser(`${dirName}/${f}`);
-                    
-                    logger.debug(`Start parsing ${f}`);
-                    let book = parser.parse();
-                    logger.info(`Parsed ${book?.title}`);
+            if (fbooks.length > 0)
+                logger.info(`Found ${fbooks.length} new books.`)
 
-                    if (book) {
-                        books.push(book);
-                        logger.info(`Added ${book.title}`);
-                        logger.debug(`Pushed id: ${book._id}`);
+            for await (const fileName of fbooks) {
+                counter++;
 
-                        let zip = new JSZip().file(`${f.slice(0, -4)}.fb2`, Buffer.from(parser.reencodeBook(`${dirName}/${f}`)));
+                let bookReader = new BookReader(dirName, fileName, 'UTF-8');
+                bookReader.read();
+                logger.debug(`Loaded ${fileName}`)
 
-                            zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
-                            .pipe(fs.createWriteStream(`${config.observerOptions.output_dir}/${book._id}.zip`))
-                            .on('finish', () => {
-                                logger.debug(`Archine written.`);
-                            });
+                if (!bookReader.content) {
+                    continue;
+                }
 
-                            logger.info(`${book._id}.zip has been written`);
-                    }
+                let parser = new FB2Parser(bookReader.content);
+                const book = await parser.parse();
+                logger.debug(`Parsed ${fileName}`)
 
-                    fs.unlinkSync(`${dirName}/${f}`);
-                    logger.debug("Ended chunk");
-                });
+                if (!book) {
+                    continue;
+                }
+                books.push(book)
 
-                logger.debug("Started inserting...");
-                await Books.collection.insertMany(books)
-                    .then(
-                        b => {
-                            logger.info("Insertion complete!");
-                            // logger.debug(`Inserted id: ${b.insertedIds[0]}`);
-                        }
-                    );
+                const zip = new AdmZip();
+                zip.addFile(`${fileName.slice(0, -4)}.fb2`, Buffer.from(bookReader.content));
+                zip.writeZip(path.resolve(`${config.observerOptions.output_dir}/${book._id}.zip`));
+                fs.unlinkSync(path.resolve(`${config.observerOptions.upload_dir}/${fileName}`));
 
-                books = [];
+                logger.debug(`Saved ${fileName} to ${book._id}.zip`)
+
+                if (counter % Observer.chunk_size === 0 || fbooks.length === counter) {
+                    await this.insertBooks(books)
+                    books = [];
+                }
             }
 
             if (books.length == 0)

@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import * as uuid from 'uuid';
-// import { v4 as uuidv4 } from 'uuid';
 
 export interface IBook extends Document {
     _id: string;
@@ -35,7 +34,6 @@ const BookSchema = new Schema({
     },
     title: {
         type: String,
-        // unique: [ true, "Title must be unique"],
         required: true
     },
     authors: {

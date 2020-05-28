@@ -15,16 +15,16 @@ export const logger = createLogger({
     ),
     defaultMeta: { service: "observer" },
     transports: [
-        new transports.Console({ 
-            handleExceptions: true, 
-            level: "debug", 
+        new transports.Console({
+            handleExceptions: true,
+            level: "debug",
             format: format.combine(
                 format.colorize(),
                 fmt
             )
         }),
-        new transports.File({ 
-            filename: `./logs/log-${date_str}`, 
+        new transports.File({
+            filename: `./logs/log-${date_str}`,
             level: "verbose",
             format: format.combine(fmt)
         })
